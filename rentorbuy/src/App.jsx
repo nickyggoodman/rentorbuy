@@ -5,28 +5,75 @@ function App() {
 
   const [inputValues, setInputValues] = useState(
     {
-      homePrice: 500000
+      homePrice: 500000,
+      downPayment: 0,
+      mortgageRate: 0,
+      loanTerm: 0,
+      homeInsurance: 0,
+      closingCosts: 0,
+      hoaCondoFees: 0,
+      monthlyMaintenance: 0,
+      propertyTax: 0,
+      homePriceGrowth: 0,
+      stayDuration: 0,
+      desiredRent: 0,
+      renterInsurance: 0,
+      securityDeposit: 0,
+      petDeposit: 0,
+      utilIncluded: 0,
+      appFee: 0,
+      parkingFee: 0,
+      maintenanceFee: 0,
+      amenitiesFee: 0,
     }
-  )
+  );
+
+  function handleInputChange(e) {
+    setInputValues({
+      ...inputValues,
+      [e.target.id] : e.target.value
+    });
+  }
 
   return (
     <>
       <h1>rent-or-buy</h1>
     
       <h2>Location</h2>
+
       <div>
         <label htmlFor="desiredLocation">Desired location</label>
-        <input defaultValue={inputValues.homePrice} type="number"  name="desiredLocation" id="desiredLocation"/>
+        <input  type="text"  name="desiredLocation" id="desiredLocation"/>
       </div>
+
       <h2>Owning</h2>
+
+      <div>
+        <label htmlFor="homePrice">Home price</label>
+        <input 
+          value={inputValues.homePrice} 
+          type="number"  
+          name="homePrice" 
+          id="homePrice" 
+          onChange={handleInputChange}/>
+      </div>
+
       <div>
         <label htmlFor="downPayment">Down payment</label>
-        <input type="number" defaultValue="0" name="downPayment" id="downPayment" />
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="downPayment" 
+          id="downPayment" />
       </div>  
 
       <div>
         <label htmlFor="mortgageRate">Mortgage rate</label>
-        <input type="number" defaultValue="0" name="mortgageRate" id="mortgageRate" />
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="mortgageRate" 
+          id="mortgageRate" />
       </div>
 
       <div>
@@ -39,37 +86,65 @@ function App() {
     
       <div>
         <label htmlFor="homeInsurance">Home insurance</label>
-        <input type="number" defaultValue="0" name="homeInsurance" id="homeInsurance" />
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="homeInsurance" 
+          id="homeInsurance" />
       </div>
 
       <div>
         <label htmlFor="closingCosts">Desired location</label>
-        <input type="number" defaultValue="0" name="closingCosts" id="closingCosts" />
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="closingCosts" 
+          id="closingCosts" />
       </div>
 
       <div>
-        <label htmlFor="HOA/condo fees">HOA/condo fees</label>
-        <input type="number" defaultValue="0" name="HOA/condo fees" id="HOA/condo fees" />
+        <label htmlFor="hoaCondoFees">HOA/condo fees</label>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="hoaCondoFees" 
+          id="hoaCondoFees" />
       </div>
 
       <div>
         <label htmlFor="monthlyMaintenance">Monthly maintenance</label>
-        <input type="number" defaultValue="0" name="monthlyMaintenance" id="monthlyMaintenance" />
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="monthlyMaintenance" 
+          id="monthlyMaintenance" />
       </div>
     
       <div>
         <label htmlFor="propertyTax">Property tax</label>
-        <input type="number" defaultValue="0" name="propertyTax" id="propertyTax"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="propertyTax" 
+          id="propertyTax"/>
       </div>
 
       <div>
         <label htmlFor="homePriceGrowth">Home price growth rate</label>
-        <input type="number" defaultValue="0" name="homePriceGrowth" id="homePriceGrowth"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="homePriceGrowth" 
+          id="homePriceGrowth"/>
       </div>
     
       <div>
         <label htmlFor="stayDuration">Years planned to stay</label>
-        <input type="number" defaultValue="0" name="stayDuration" id="stayDuration"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="stayDuration" 
+          id="stayDuration"/>
       </div>
       
       <h2>Renting</h2>
@@ -122,8 +197,9 @@ function App() {
       <h2>Total costs</h2>
       <h3>Renting cost:</h3>
       <h3>Owning costs</h3>
+      <p>{inputValues.homePrice}</p>
     </>
-  )
+  );
 }
 
 export default App
