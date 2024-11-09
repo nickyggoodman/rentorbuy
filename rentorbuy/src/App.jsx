@@ -8,7 +8,7 @@ function App() {
       homePrice: 500000,
       downPayment: 0,
       mortgageRate: 0,
-      loanTerm: 0,
+      loanTerm: "30 year",
       homeInsurance: 0,
       closingCosts: 0,
       hoaCondoFees: 0,
@@ -34,6 +34,10 @@ function App() {
       [e.target.id] : e.target.value
     });
   }
+  
+  function calculateTotalCost() {
+    return 
+  }
 
   return (
     <>
@@ -55,7 +59,7 @@ function App() {
           type="number"  
           name="homePrice" 
           id="homePrice" 
-          onChange={handleInputChange}/>
+          onChange={handleInputChange} />
       </div>
 
       <div>
@@ -64,7 +68,8 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="downPayment" 
-          id="downPayment" />
+          id="downPayment"
+          onChange={handleInputChange} />
       </div>  
 
       <div>
@@ -73,14 +78,15 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="mortgageRate" 
-          id="mortgageRate" />
+          id="mortgageRate"
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="loanTerm">Loan term</label>
-        <select name="loanTerm" id="loanTerm">
-          <option value="30year">30 year</option>
-          <option value="15year">15 year</option>
+        <select name="loanTerm" id="loanTerm" onChange={handleInputChange}>
+          <option value="30 year">30 year</option>
+          <option value="15 year">15 year</option>
         </select>
       </div>
     
@@ -90,7 +96,8 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="homeInsurance" 
-          id="homeInsurance" />
+          id="homeInsurance"
+          onChange={handleInputChange}/>
       </div>
 
       <div>
@@ -99,7 +106,8 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="closingCosts" 
-          id="closingCosts" />
+          id="closingCosts"
+          onChange={handleInputChange} />
       </div>
 
       <div>
@@ -108,7 +116,8 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="hoaCondoFees" 
-          id="hoaCondoFees" />
+          id="hoaCondoFees"
+          onChange={handleInputChange} />
       </div>
 
       <div>
@@ -117,7 +126,8 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="monthlyMaintenance" 
-          id="monthlyMaintenance" />
+          id="monthlyMaintenance" 
+          onChange={handleInputChange} />
       </div>
     
       <div>
@@ -126,7 +136,8 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="propertyTax" 
-          id="propertyTax"/>
+          id="propertyTax"
+          onChange={handleInputChange} />
       </div>
 
       <div>
@@ -135,7 +146,8 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="homePriceGrowth" 
-          id="homePriceGrowth"/>
+          id="homePriceGrowth"
+          onChange={handleInputChange} />
       </div>
     
       <div>
@@ -144,60 +156,106 @@ function App() {
           type="number" 
           defaultValue="0" 
           name="stayDuration" 
-          id="stayDuration"/>
+          id="stayDuration"
+          onChange={handleInputChange} />
       </div>
       
       <h2>Renting</h2>
 
       <div>
         <label htmlFor="desiredRent">Desired rent</label>
-        <input type="number" defaultValue="0" name="desiredRent" id="desiredRent"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="desiredRent" 
+          id="desiredRent" 
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="renterInsurance">Rent insurance</label>
-        <input type="number" defaultValue="0" name="renterInsurance" id="renterInsurance"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="renterInsurance" 
+          id="renterInsurance"
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="securityDeposit">Security deposit</label>
-        <input type="number" defaultValue="0" name="securityDeposit" id="securityDeposit"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="securityDeposit" 
+          id="securityDeposit"
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="petDeposit">Pet deposit</label>
-        <input type="number" defaultValue="0" name="petDeposit" id="petDeposit"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="petDeposit" 
+          id="petDeposit"
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="utilIncluded">Utilities included</label>
-        <input type="number" defaultValue="0" name="utilIncluded" id="utilIncluded"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="utilIncluded" 
+          id="utilIncluded"
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="appFee">Application fee</label>
-        <input type="number" defaultValue="0" name="appFee" id="appFee"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="appFee" 
+          id="appFee"
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="parkingFee">Parking fee</label>
-        <input type="number" defaultValue="0" name="parkingFee" id="parkingFee"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="parkingFee" 
+          id="parkingFee"
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="maintenanceFee">Maintenance fee</label>
-        <input type="number" defaultValue="0" name="maintenanceFee" id="maintenanceFee"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="maintenanceFee" 
+          id="maintenanceFee"
+          onChange={handleInputChange} />
       </div>
 
       <div>
         <label htmlFor="amenitiesFee">Amenities fee</label>
-        <input type="number" defaultValue="0" name="amenitiesFee" id="amenitiesFee"/>
+        <input 
+          type="number" 
+          defaultValue="0" 
+          name="amenitiesFee" 
+          id="amenitiesFee"
+          onChange={handleInputChange} />
       </div>
 
       <h2>Total costs</h2>
       <h3>Renting cost:</h3>
       <h3>Owning costs</h3>
-      <p>{inputValues.homePrice}</p>
+      <p>{inputValues.loanTerm}</p>
     </>
   );
 }
