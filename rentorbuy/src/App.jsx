@@ -5,6 +5,7 @@ function App() {
 
   const [inputValues, setInputValues] = useState(
     {
+      desiredLocation: "",
       homePrice: 500000,
       downPayment: 0,
       mortgageRate: 0,
@@ -34,9 +35,13 @@ function App() {
       [e.target.id] : e.target.value
     });
   }
-  
+ 
+  // see formula:  https://en.wikipedia.org/wiki/Mortgage_calculator
+  // payment same:  https://www.calculator.net/mortgage-calculator.html
   function calculateTotalCost() {
-    return 
+    const sum = 0;
+
+    return sum;
   }
 
   return (
@@ -47,7 +52,11 @@ function App() {
 
       <div>
         <label htmlFor="desiredLocation">Desired location</label>
-        <input  type="text"  name="desiredLocation" id="desiredLocation"/>
+        <input  
+          type="text"  
+          name="desiredLocation" 
+          id="desiredLocation"
+          onChange={handleInputChange}/>
       </div>
 
       <h2>Owning</h2>
