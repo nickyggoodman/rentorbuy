@@ -7,9 +7,9 @@ function App() {
     {
       desiredLocation: "",
       homePrice: 500000,
-      downPayment: 0,
-      mortgageRate: 0,
-      loanTerm: "30 year",
+      downPayment: 0.20,
+      mortgageRate: 0.05,
+      loanTerm: 30,
       homeInsurance: 0,
       closingCosts: 0,
       hoaCondoFees: 0,
@@ -35,14 +35,30 @@ function App() {
       [e.target.id] : e.target.value
     });
   }
- 
-  // see formula:  https://en.wikipedia.org/wiki/Mortgage_calculator
-  // payment same:  https://www.calculator.net/mortgage-calculator.html
-  function calculateTotalCost() {
-    const sum = 0;
 
-    return sum;
-  }
+  /*
+    The total principle that you pay is unaffected by the length of the 
+    mortgage term or the interest rate. When you have a longer loan term,
+    or if you have a higher interest, then the total interest payed will be
+    larger. have a 15 year loan instead of a 30 year loan could save you
+    100k in the end. and having a few percentage point lower interest rate
+    could make the difference of 100k. 
+
+    The actual amount you pay per month
+    does not change over the length of the term, only the proportion of the 
+    payment that goes to the interest vs. the principle will change over
+    the course of the mortage term.** 
+    
+    ** for Fixed Rate Mortgages.
+  */
+
+  // see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
+  function calculateMonthlyPayment() {
+    const r = inputValues.mortgageRate/12;
+    const n = inputValues.loanTerm*12;
+    const p = inputValues.homePrice * (1 - inputValues.downPayment);
+    return ((p * r * (1 + r)**n)/(((1 + r)**n) - 1));
+  } 
 
   return (
     <>
@@ -75,7 +91,7 @@ function App() {
         <label htmlFor="downPayment">Down payment</label>
         <input 
           type="number" 
-          defaultValue="0" 
+          defaultValue="0.20" 
           name="downPayment" 
           id="downPayment"
           onChange={handleInputChange} />
@@ -85,7 +101,7 @@ function App() {
         <label htmlFor="mortgageRate">Mortgage rate</label>
         <input 
           type="number" 
-          defaultValue="0" 
+          defaultValue="0.05" 
           name="mortgageRate" 
           id="mortgageRate"
           onChange={handleInputChange} />
@@ -94,8 +110,9 @@ function App() {
       <div>
         <label htmlFor="loanTerm">Loan term</label>
         <select name="loanTerm" id="loanTerm" onChange={handleInputChange}>
-          <option value="30 year">30 year</option>
-          <option value="15 year">15 year</option>
+          <option value={30}>30 year</option>
+          <option value={20}>20 year</option>
+          <option value={15}>15 year</option>
         </select>
       </div>
     
@@ -265,6 +282,8 @@ function App() {
       <h3>Renting cost:</h3>
       <h3>Owning costs</h3>
       <p>{inputValues.loanTerm}</p>
+      <h3>monthly payment</h3>
+      <p>{calculateMonthlyPayment()}</p>
     </>
   );
 }
