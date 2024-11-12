@@ -53,12 +53,36 @@ function App() {
   */
 
   // see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
-  function calculateMonthlyPayment() {
+  function calcMonthlyPayment() {
     const r = inputValues.mortgageRate/12;
     const n = inputValues.loanTerm*12;
     const p = inputValues.homePrice * (1 - inputValues.downPayment);
     return ((p * r * (1 + r)**n)/(((1 + r)**n) - 1));
   } 
+ 
+  function calcMonthlyRent() {
+    return (Number(inputValues.desiredRent) + inputValues.renterInsurance + inputValues.parkingFee
+    + inputValues.maintenanceFee + inputValues.amenitiesFee); 
+  } 
+  
+  function calcOwnerCost() {
+    const termLen = inputValues.loanTerm;
+    const monthlyMort = calcMonthlyPayment();
+    const homeInsCost = inputValues.homeInsurance;
+    const hoaFee = inputValues.homeInsurance;
+    const maintCost = inputValues.monthlyMaintenance;
+    const propTax = inputValues.propertyTax;
+    const closingCost = inputValues.homeInsurance; // percent home price once
+
+    const recurrent = ((monthlyMort + homeInsCost + hoaFee + maintCost + propTax)*12*termLen);
+    const oneTime = (inputValues.downPayment * inputValues.homePrice) + (closingCost);
+    return recurrent + oneTime;
+  }
+
+  function calcRenterCost() {
+    return ((calcMonthlyRent() * 12 * inputValues.loanTerm) 
+    + (inputValues.securityDeposit + inputValues.appFee + inputValues.petDeposit));
+  }
 
   return (
     <>
@@ -127,7 +151,7 @@ function App() {
       </div>
 
       <div>
-        <label htmlFor="closingCosts">Desired location</label>
+        <label htmlFor="closingCosts">Closing cost</label>
         <input 
           type="number" 
           defaultValue="0" 
@@ -280,10 +304,11 @@ function App() {
 
       <h2>Total costs</h2>
       <h3>Renting cost:</h3>
+      <p>{calcRenterCost()}</p>
       <h3>Owning costs</h3>
-      <p>{inputValues.loanTerm}</p>
+      <p>{calcOwnerCost()}</p>
       <h3>monthly payment</h3>
-      <p>{calculateMonthlyPayment()}</p>
+      <p>{calcMonthlyPayment()}</p>
     </>
   );
 }
