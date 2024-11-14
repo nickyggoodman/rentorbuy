@@ -29,6 +29,10 @@ function App() {
     }
   );
 
+  /*
+   * Will change the state of the inputValues json dependent. If it is a number
+   * then want to read the value as a number so we don't have to convert later.
+   */
   function handleInputChange(e) {
     e.target.type == "number"? setInputValues({
       ...inputValues,
@@ -55,7 +59,11 @@ function App() {
     ** for Fixed Rate Mortgages.
   */
 
-  // see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
+  /*
+   * see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
+   * calculates the monthly payment given the loan term, mortgage rate,
+   * and principal after down payment.
+   */
   function calcMonthlyPayment() {
     const r = inputValues.mortgageRate/12;
     const n = inputValues.loanTerm*12;
@@ -63,25 +71,35 @@ function App() {
     return ((p * r * (1 + r)**n)/(((1 + r)**n) - 1));
   } 
  
+  /*
+   * calculates the monthly cost of renting after rent, renter insurance, 
+   * maintenance fees, utilities (included), etc. Does not include one time
+   * payments such as pet deposit or security deposit.
+   */
   function calcMonthlyRent() {
-    return (inputValues.desiredRent + inputValues.renterInsurance + inputValues.parkingFee
-    + inputValues.maintenanceFee + inputValues.amenitiesFee); 
+    return (inputValues.desiredRent + inputValues.renterInsurance 
+      + inputValues.parkingFee + inputValues.maintenanceFee 
+      + inputValues.amenitiesFee); 
   } 
   
+  /*
+   * Calculates the total cost of ownership after the monthly mortgage payment.
+   * Additional costs such as recurrent home insurance costs and one-time
+   * closing costs are accounted in the total cost of owning a home.
+   */
   function calcOwnerCost() {
-    const termLen = inputValues.loanTerm;
-    const monthlyMort = calcMonthlyPayment();
-    const homeInsCost = inputValues.homeInsurance;
-    const hoaFee = inputValues.homeInsurance;
-    const maintCost = inputValues.monthlyMaintenance;
-    const propTax = inputValues.propertyTax;
-    const closingCost = inputValues.homeInsurance; // percent home price once
-
-    const recurrent = ((monthlyMort + homeInsCost + hoaFee + maintCost + propTax)*12*termLen);
-    const oneTime = (inputValues.downPayment * inputValues.homePrice) + (closingCost);
+    const recurrent = ((calcMonthlyPayment() + inputValues.homeInsurance 
+      + inputValues.hoaCondoFees + inputValues.monthlyMaintenance 
+      + inputValues.propertyTax) * 12 * inputValues.loanTerm);
+    const oneTime = (inputValues.downPayment * inputValues.homePrice) 
+      + inputValues.closingCosts;
     return recurrent + oneTime;
   }
 
+  /*
+   * Calculates the total cost of renting including recurrent monthly payments
+   * and one-time costs such as security deposit and pet deposit.
+   */
   function calcRenterCost() {
     return ((calcMonthlyRent() * 12 * inputValues.loanTerm) 
     + (inputValues.securityDeposit + inputValues.appFee + inputValues.petDeposit));
