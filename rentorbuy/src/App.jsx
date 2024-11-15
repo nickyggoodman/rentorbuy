@@ -44,22 +44,6 @@ function App() {
   }
 
   /*
-    The total principle that you pay is unaffected by the length of the 
-    mortgage term or the interest rate. When you have a longer loan term,
-    or if you have a higher interest, then the total interest payed will be
-    larger. have a 15 year loan instead of a 30 year loan could save you
-    100k in the end. and having a few percentage point lower interest rate
-    could make the difference of 100k. 
-
-    The actual amount you pay per month
-    does not change over the length of the term, only the proportion of the 
-    payment that goes to the interest vs. the principle will change over
-    the course of the mortage term.** 
-    
-    ** for Fixed Rate Mortgages.
-  */
-
-  /*
    * see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
    * calculates the monthly payment given the loan term, mortgage rate,
    * and principal after down payment.
