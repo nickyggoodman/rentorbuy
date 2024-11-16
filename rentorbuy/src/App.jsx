@@ -10,6 +10,7 @@ function App() {
       downPayment: 0.20,
       mortgageRate: 0.05,
       loanTerm: 30,
+      inflateRate: 0,
       homeInsurance: 0,
       closingCosts: 0,
       hoaCondoFees: 0,
@@ -72,6 +73,13 @@ function App() {
    * closing costs are accounted in the total cost of owning a home.
    */
   function calcOwnerCost() {
+    // property tax will depend on the price of the home, which will change by
+    // some inflation rate, say 3% for conservative eval
+    
+    // can also determine what the house will gain dependent on if you think
+    // the local market will outperform or underperform the market average
+
+    // consider the above to calc total cost. 
     const recurrent = ((calcMonthlyPayment() + inputValues.homeInsurance 
       + inputValues.hoaCondoFees + inputValues.monthlyMaintenance 
       + inputValues.propertyTax) * 12 * inputValues.loanTerm);
