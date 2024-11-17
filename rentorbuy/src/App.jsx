@@ -10,13 +10,13 @@ function App() {
       downPayment: 0.20,
       mortgageRate: 0.05,
       loanTerm: 30,
-      inflateRate: 0,
+      inflationRate: 0,
+      homeValGrowth: 0,
       homeInsurance: 0,
       closingCosts: 0,
       hoaCondoFees: 0,
       monthlyMaintenance: 0,
       propertyTax: 0,
-      homePriceGrowth: 0,
       stayDuration: 0,
       desiredRent: 0,
       renterInsurance: 0,
@@ -205,16 +205,6 @@ function App() {
       </div>
 
       <div>
-        <label htmlFor="homePriceGrowth">Home price growth rate</label>
-        <input 
-          type="number" 
-          value={inputValues.homePriceGrowth} 
-          name="homePriceGrowth" 
-          id="homePriceGrowth"
-          onChange={handleInputChange} />
-      </div>
-    
-      <div>
         <label htmlFor="stayDuration">Years planned to stay</label>
         <input 
           type="number" 
@@ -223,7 +213,34 @@ function App() {
           id="stayDuration"
           onChange={handleInputChange} />
       </div>
+
+      <div>
+        <label htmlFor="inflationRate">Inflation rate</label>
+        <input 
+          value={inputValues.inflationRate} 
+          type="number"  
+          name="inflationRate" 
+          id="inflationRate" 
+          onChange={handleInputChange} />
+      </div>
+
+      <div>
+        <label htmlFor="homeValGrowth">Home value growth rate</label>
+        <input 
+          value={inputValues.homeValGrowth} 
+          type="number"  
+          name="homeValGrowth" 
+          id="homeValGrowth" 
+          onChange={handleInputChange} />
+      </div>
       
+    {
+      /*
+       * section II for everything that consists of the cost of renting a 
+       * place. These will be multiplied by 12 months by the years of staying
+       * in a location
+       */
+    }
       <h2>Renting</h2>
 
       <div>
