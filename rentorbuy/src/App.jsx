@@ -103,7 +103,7 @@ function App() {
     
       <h2>Location</h2>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="desiredLocation">Desired location</label>
         <input  
           value={inputValues.desiredLocation}
@@ -115,7 +115,7 @@ function App() {
 
       <h2>Owning</h2>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="homePrice">Home price</label>
         <input 
           value={inputValues.homePrice} 
@@ -125,7 +125,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="downPayment">Down payment</label>
         <input 
           type="number" 
@@ -135,7 +135,7 @@ function App() {
           onChange={handleInputChange} />
       </div>  
 
-      <div>
+      <div className="inputField">
         <label htmlFor="mortgageRate">Mortgage rate</label>
         <input 
           type="number" 
@@ -145,7 +145,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="loanTerm">Loan term</label>
         <select name="loanTerm" id="loanTerm" onChange={handleInputChange}>
           <option value={30}>30 year</option>
@@ -154,7 +154,7 @@ function App() {
         </select>
       </div>
     
-      <div>
+      <div className="inputField">
         <label htmlFor="homeInsurance">Home insurance</label>
         <input 
           type="number" 
@@ -164,7 +164,7 @@ function App() {
           onChange={handleInputChange}/>
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="closingCosts">Closing cost</label>
         <input 
           type="number" 
@@ -174,7 +174,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="hoaCondoFees">HOA/condo fees</label>
         <input 
           type="number" 
@@ -184,7 +184,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="monthlyMaintenance">Monthly maintenance</label>
         <input 
           type="number" 
@@ -194,7 +194,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
     
-      <div>
+      <div className="inputField">
         <label htmlFor="propertyTax">Property tax</label>
         <input 
           type="number" 
@@ -204,7 +204,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="stayDuration">Years planned to stay</label>
         <input 
           type="number" 
@@ -214,7 +214,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="inflationRate">Inflation rate</label>
         <input 
           value={inputValues.inflationRate} 
@@ -224,7 +224,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="homeValGrowth">Home value growth rate</label>
         <input 
           value={inputValues.homeValGrowth} 
@@ -243,7 +243,7 @@ function App() {
     }
       <h2>Renting</h2>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="desiredRent">Desired rent</label>
         <input 
           type="number" 
@@ -253,7 +253,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="renterInsurance">Rent insurance</label>
         <input 
           type="number" 
@@ -263,7 +263,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="securityDeposit">Security deposit</label>
         <input 
           type="number" 
@@ -273,7 +273,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="petDeposit">Pet deposit</label>
         <input 
           type="number" 
@@ -283,7 +283,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="utilIncluded">Utilities included</label>
         <input 
           type="number" 
@@ -293,7 +293,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="appFee">Application fee</label>
         <input 
           type="number" 
@@ -303,7 +303,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="parkingFee">Parking fee</label>
         <input 
           type="number" 
@@ -313,7 +313,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="maintenanceFee">Maintenance fee</label>
         <input 
           type="number" 
@@ -323,7 +323,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div>
+      <div className="inputField">
         <label htmlFor="amenitiesFee">Amenities fee</label>
         <input 
           type="number" 
