@@ -31,6 +31,30 @@ function App() {
   );
 
   /*
+   * Overview:
+   * - Renting does not provide equity, but a owning a house provides capital
+   *   gains.
+   *
+   * - Rent will increase with inflation, but a mortgage payment does not.
+   *   Given there is inflation (say 3%), rent will be more expensive
+   *   than your mortgage payment towards the end of your mortgage, ceterus
+   *   paribus.
+   * 
+   * - Renting costs such as parking, amentities fees, maintenances fees will
+   *   increase with inflation, but so will the costs of owning a home such as
+   *   property tax and maintenance costs. 
+   *
+   * - A dynamic model which accounts for inflation will give the most
+   *   realistic comparison between owning a home and renting.
+   *
+   * - Some localities see a larger spread between home price and rent. Rent
+   *   can be nearly half the price of a mortgage in large city centers or
+   *   areas with low supply such as Los Angeles. This can be added in the
+   *   calculation, but is generally difficult to predict 10, 20, years out.
+   *
+   */
+
+  /*
    * Will change the state of the inputValues json dependent. If it is a number
    * then want to read the value as a number so we don't have to convert later.
    */
