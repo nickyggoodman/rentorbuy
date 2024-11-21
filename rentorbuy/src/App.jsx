@@ -68,6 +68,23 @@ function App() {
     });
   }
 
+  
+  /*
+   * calculate the monthly cost of owning a home adjusted for inflation. 
+   * Mortgage will not change but maintenance cost, property tax, will change
+   * with inflation
+   */
+  function calcMonthlyHomeCost(month) {
+    return;
+  }
+
+  /*
+   * calculate the monthly cost of renting a home adjusted for inflation
+   */
+  function calcMonthlyRentCost(month) {
+    return;
+  }
+
   /*
    * see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
    * calculates the monthly payment given the loan term, mortgage rate,
