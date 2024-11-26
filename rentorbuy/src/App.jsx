@@ -69,73 +69,31 @@ function App() {
   }
 
   
-  /*
-   * calculate the monthly cost of owning a home adjusted for inflation. 
-   * Mortgage will not change but maintenance cost, property tax, will change
-   * with inflation
-   */
-  function calcMonthlyHomeCost(month) {
-    return;
-  }
-
-  /*
-   * calculate the monthly cost of renting a home adjusted for inflation
-   */
-  function calcMonthlyRentCost(month) {
-    return;
-  }
 
   /*
    * see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
    * calculates the monthly payment given the loan term, mortgage rate,
    * and principal after down payment.
    */
-  function calcMonthlyPayment() {
+  function calcMortgagePayment() {
     const r = inputValues.mortgageRate/12;
     const n = inputValues.loanTerm*12;
     const p = inputValues.homePrice * (1 - inputValues.downPayment);
     return ((p * r * (1 + r)**n)/(((1 + r)**n) - 1));
   } 
- 
+
   /*
-   * calculates the monthly cost of renting after rent, renter insurance, 
-   * maintenance fees, utilities (included), etc. Does not include one time
-   * payments such as pet deposit or security deposit.
-   */
-  function calcMonthlyRent() {
-    return (inputValues.desiredRent + inputValues.renterInsurance 
-      + inputValues.parkingFee + inputValues.maintenanceFee 
-      + inputValues.amenitiesFee); 
-  } 
-  
-  /*
-   * Calculates the total cost of ownership after the monthly mortgage payment.
-   * Additional costs such as recurrent home insurance costs and one-time
-   * closing costs are accounted in the total cost of owning a home.
+   * summation over n months of loan term with payments interst compounded:
+   * S_(i=1)^n (mortgagePayment + insurancePayment*(1+r/n)^(n*i) + ...)
+   *
    */
   function calcOwnerCost() {
-    // property tax will depend on the price of the home, which will change by
-    // some inflation rate, say 3% for conservative eval
-    
-    // can also determine what the house will gain dependent on if you think
-    // the local market will outperform or underperform the market average
-
-    // consider the above to calc total cost. 
-    const recurrent = ((calcMonthlyPayment() + inputValues.homeInsurance 
-      + inputValues.hoaCondoFees + inputValues.monthlyMaintenance 
-      + inputValues.propertyTax) * 12 * inputValues.loanTerm);
-    const oneTime = (inputValues.downPayment * inputValues.homePrice) 
-      + inputValues.closingCosts;
-    return recurrent + oneTime;
   }
 
   /*
-   * Calculates the total cost of renting including recurrent monthly payments
-   * and one-time costs such as security deposit and pet deposit.
+   * 
    */
   function calcRenterCost() {
-    return ((calcMonthlyRent() * 12 * inputValues.loanTerm) 
-    + (inputValues.securityDeposit + inputValues.appFee + inputValues.petDeposit));
   }
 
   return (
