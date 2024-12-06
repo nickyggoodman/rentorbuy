@@ -83,11 +83,22 @@ function App() {
   } 
 
   /*
-   * summation over n months of loan term with payments interst compounded:
+   * summation over n months of stay length with payments interest compounded:
    * S_(i=1)^n (mortgagePayment + insurancePayment*(1+r/n)^(n*i) + ...)
-   *
+   * 
+   * mortgage payment is only paid during length of term. After term ends, all
+   * other payments continue (e.g., property tax)
    */
   function calcOwnerCost() {
+    let totalCost = 0;
+    for (let i = 0; i < inputValues.stayDuration; i++) {
+      // mortagage payment stays the same throughout the stay duration
+      totalCost += calcMortgagePayment(); 
+      // using compound interest to account for inflation
+      // property tax dependent on the evaluation of the house, which may
+      // outpace the overall inflation rate
+    }
+    return totalCost;
   }
 
   /*
