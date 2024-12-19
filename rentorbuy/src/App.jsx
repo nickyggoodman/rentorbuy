@@ -30,6 +30,34 @@ function App() {
     }
   );
 
+  const [displayValues, setDisplayValues] = useState(
+    {
+      desiredLocation: "",
+      homePrice: 500000,
+      downPayment: 0.20,
+      mortgageRate: 0.05,
+      loanTerm: 30,
+      inflationRate: 0,
+      homeValGrowth: 0,
+      homeInsurance: 0,
+      closingCosts: 0,
+      hoaCondoFees: 0,
+      monthlyMaintenance: 0,
+      propertyTax: 0,
+      stayDuration: 30,
+      desiredRent: 0,
+      renterInsurance: 0,
+      securityDeposit: 0,
+      petDeposit: 0,
+      utilIncluded: 0,
+      appFee: 0,
+      parkingFee: 0,
+      maintenanceFee: 0,
+      amenitiesFee: 0,
+    }
+  );
+
+
   /*
    * Overview:
    * - Renting does not provide equity, but a owning a house provides capital
@@ -54,30 +82,6 @@ function App() {
    *
    */
 
-  /*
-   * Will change the state of the inputValues json dependent. If it is a number
-   * then want to read the value as a number so we don't have to convert later.
-   */
-  function handleInputChange(e) {
-//    e.target.type == "number"? setInputValues({
-//      ...inputValues,
-//      [e.target.id] : e.target.valueAsNumber
-//    }) : setInputValues({
-//      ...inputValues,
-//      [e.target.id] : e.target.value
-//    });
-    if (e.target.type == "number") {
-      setInputValues({
-        ...inputValues,
-        [e.target.id] : e.target.valueAsNumber || 0
-      });
-    } else {
-      setInputValues({
-        ...inputValues,
-        [e.target.id] : e.target.value || 0
-      });
-    }
-  }
 
   /*
    * see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
@@ -88,7 +92,13 @@ function App() {
     const r = inputValues.mortgageRate/12;
     const n = inputValues.loanTerm*12;
     const p = inputValues.homePrice * (1 - inputValues.downPayment);
-    return ((p * r * (1 + r)**n)/(((1 + r)**n) - 1));
+    
+    if (r == 0) {
+      return p/n
+    } else {
+      return ((p * r * (1 + r)**n)/(((1 + r)**n) - 1));
+    }
+
   } 
 
   /*
@@ -127,7 +137,7 @@ function App() {
       hoaFee = hoaFee * (1 + r/12)
     }
 
-    return totalCost;
+    return totalCost.toFixed(2);
   } 
 
   function calcRenterCost() {
@@ -144,19 +154,65 @@ function App() {
       growingCosts = growingCosts * (1 + r/12);
     }
 
-    return totalCost;
+    return totalCost.toFixed(2);
+  }
+  
+
+  /*
+   * Updates inputValues with what is in the input or with 0 if the input is 
+   * empty (if nothing is entered)
+   */
+  function handleInputChange(e) {
+
+    if (e.target.type == "number") {
+
+      setDisplayValues({
+        ...displayValues,
+        [e.target.id] : e.target.value || ""
+      });
+      setInputValues({
+        ...inputValues,
+        [e.target.id] : e.target.valueAsNumber || 0
+      });
+
+    } else {
+
+      setDisplayValues({
+        ...displayValues,
+        [e.target.id] : e.target.value || ""
+      });
+      setInputValues({
+        ...inputValues,
+        [e.target.id] : e.target.value || 0
+      });
+
+    }
+
+  }
+
+
+  function handleBlur(e) {
+
+    if (!e.target.value) {
+      setDisplayValues({
+        ...displayValues,
+        [e.target.id] : 0
+      });
+
+    }
+
   }
 
   return (
     <>
-      <h1>rent-or-buy</h1>
+      <h1>Rent or Buy?</h1>
     
       <h2>Location</h2>
 
       <div className="inputField">
         <label htmlFor="desiredLocation">Desired location</label>
         <input  
-          value={inputValues.desiredLocation}
+          value={displayValues.desiredLocation}
           type="text"  
           name="desiredLocation" 
           id="desiredLocation"
@@ -168,31 +224,35 @@ function App() {
       <div className="inputField">
         <label htmlFor="homePrice">Home price</label>
         <input 
-          value={inputValues.homePrice} 
+          value={displayValues.homePrice} 
           type="number"  
           name="homePrice" 
           id="homePrice" 
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
+
 
       <div className="inputField">
         <label htmlFor="downPayment">Down payment</label>
         <input 
           type="number" 
-          value={inputValues.downPayment} 
+          value={displayValues.downPayment} 
           name="downPayment" 
           id="downPayment"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>  
 
       <div className="inputField">
         <label htmlFor="mortgageRate">Mortgage rate</label>
         <input 
           type="number" 
-          value={inputValues.mortgageRate} 
+          value={displayValues.mortgageRate} 
           name="mortgageRate" 
           id="mortgageRate"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
@@ -208,10 +268,11 @@ function App() {
         <label htmlFor="stayDuration">Years planned to stay</label>
         <input 
           type="number" 
-          value={inputValues.stayDuration} 
+          value={displayValues.stayDuration} 
           name="stayDuration" 
           id="stayDuration"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur}/>
       </div>
 
     
@@ -219,71 +280,78 @@ function App() {
         <label htmlFor="homeInsurance">Home insurance</label>
         <input 
           type="number" 
-          value={inputValues.homeInsurance} 
+          value={displayValues.homeInsurance} 
           name="homeInsurance" 
           id="homeInsurance"
-          onChange={handleInputChange}/>
+          onChange={handleInputChange}
+          onBlur={handleBlur}/>
       </div>
 
       <div className="inputField">
         <label htmlFor="closingCosts">Closing cost</label>
         <input 
           type="number" 
-          value={inputValues.closingCosts} 
+          value={displayValues.closingCosts} 
           name="closingCosts" 
           id="closingCosts"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="hoaCondoFees">HOA/condo fees</label>
         <input 
           type="number" 
-          value={inputValues.hoaCondoFees} 
+          value={displayValues.hoaCondoFees} 
           name="hoaCondoFees" 
           id="hoaCondoFees"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="monthlyMaintenance">Monthly maintenance</label>
         <input 
           type="number" 
-          value={inputValues.monthlyMaintenance} 
+          value={displayValues.monthlyMaintenance} 
           name="monthlyMaintenance" 
           id="monthlyMaintenance" 
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur}/>
       </div>
     
       <div className="inputField">
         <label htmlFor="propertyTax">Property tax</label>
         <input 
           type="number" 
-          value={inputValues.propertyTax} 
+          value={displayValues.propertyTax} 
           name="propertyTax" 
           id="propertyTax"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur}/>
       </div>
 
       
       <div className="inputField">
         <label htmlFor="inflationRate">Inflation rate</label>
         <input 
-          value={inputValues.inflationRate} 
+          value={displayValues.inflationRate} 
           type="number"  
           name="inflationRate" 
           id="inflationRate" 
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="homeValGrowth">Home value growth rate</label>
         <input 
-          value={inputValues.homeValGrowth} 
+          value={displayValues.homeValGrowth} 
           type="number"  
           name="homeValGrowth" 
           id="homeValGrowth" 
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
       
     {
@@ -299,99 +367,108 @@ function App() {
         <label htmlFor="desiredRent">Desired rent</label>
         <input 
           type="number" 
-          value={inputValues.desiredRent} 
+          value={displayValues.desiredRent} 
           name="desiredRent" 
           id="desiredRent" 
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="renterInsurance">Rent insurance</label>
         <input 
           type="number" 
-          value={inputValues.renterInsurance} 
+          value={displayValues.renterInsurance} 
           name="renterInsurance" 
           id="renterInsurance"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="securityDeposit">Security deposit</label>
         <input 
           type="number" 
-          value={inputValues.securityDeposit} 
+          value={displayValues.securityDeposit} 
           name="securityDeposit" 
           id="securityDeposit"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="petDeposit">Pet deposit</label>
         <input 
           type="number" 
-          value={inputValues.petDeposit} 
+          value={displayValues.petDeposit} 
           name="petDeposit" 
           id="petDeposit"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="utilIncluded">Utilities included</label>
         <input 
           type="number" 
-          value={inputValues.utilIncluded} 
+          value={displayValues.utilIncluded} 
           name="utilIncluded" 
           id="utilIncluded"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="appFee">Application fee</label>
         <input 
           type="number" 
-          value={inputValues.appFee} 
+          value={displayValues.appFee} 
           name="appFee" 
           id="appFee"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="parkingFee">Parking fee</label>
         <input 
           type="number" 
-          value={inputValues.parkingFee} 
+          value={displayValues.parkingFee} 
           name="parkingFee" 
           id="parkingFee"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="maintenanceFee">Maintenance fee</label>
         <input 
           type="number" 
-          value={inputValues.maintenanceFee} 
+          value={displayValues.maintenanceFee} 
           name="maintenanceFee" 
           id="maintenanceFee"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <div className="inputField">
         <label htmlFor="amenitiesFee">Amenities fee</label>
         <input 
           type="number" 
-          value={inputValues.amenitiesFee} 
+          value={displayValues.amenitiesFee} 
           name="amenitiesFee" 
           id="amenitiesFee"
-          onChange={handleInputChange} />
+          onChange={handleInputChange} 
+          onBlur={handleBlur} />
       </div>
 
       <h2>Total costs</h2>
     
       <h3>Owning costs</h3>
-      <p>{calcOwnerCost()}</p>
+      <p>${calcOwnerCost()}</p>
 
       <h3>Renting cost:</h3>
-      <p>{calcRenterCost()}</p>
+      <p>${calcRenterCost()}</p>
            
     </>
   );
