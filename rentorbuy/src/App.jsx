@@ -17,7 +17,7 @@ function App() {
       hoaCondoFees: 0,
       monthlyMaintenance: 0,
       propertyTax: 0,
-      stayDuration: 0,
+      stayDuration: 30,
       desiredRent: 0,
       renterInsurance: 0,
       securityDeposit: 0,
@@ -59,16 +59,25 @@ function App() {
    * then want to read the value as a number so we don't have to convert later.
    */
   function handleInputChange(e) {
-    e.target.type == "number"? setInputValues({
-      ...inputValues,
-      [e.target.id] : e.target.valueAsNumber
-    }) : setInputValues({
-      ...inputValues,
-      [e.target.id] : e.target.value
-    });
+//    e.target.type == "number"? setInputValues({
+//      ...inputValues,
+//      [e.target.id] : e.target.valueAsNumber
+//    }) : setInputValues({
+//      ...inputValues,
+//      [e.target.id] : e.target.value
+//    });
+    if (e.target.type == "number") {
+      setInputValues({
+        ...inputValues,
+        [e.target.id] : e.target.valueAsNumber || 0
+      });
+    } else {
+      setInputValues({
+        ...inputValues,
+        [e.target.id] : e.target.value || 0
+      });
+    }
   }
-
-  
 
   /*
    * see formula: https://en.wikipedia.org/wiki/Mortgage_calculator
@@ -83,28 +92,59 @@ function App() {
   } 
 
   /*
-   * summation over n months of stay length with payments interest compounded:
-   * S_(i=1)^n (mortgagePayment + insurancePayment*(1+r/n)^(n*i) + ...)
-   * 
-   * mortgage payment is only paid during length of term. After term ends, all
-   * other payments continue (e.g., property tax)
+   *
    */
   function calcOwnerCost() {
     let totalCost = 0;
-    for (let i = 0; i < inputValues.stayDuration; i++) {
-      // mortagage payment stays the same throughout the stay duration
-      totalCost += calcMortgagePayment(); 
-      // using compound interest to account for inflation
-      // property tax dependent on the evaluation of the house, which may
-      // outpace the overall inflation rate
-    }
-    return totalCost;
-  }
+    // changes according to fair market value growth rate
+    let propertyTax = inputValues.propertyTax;
+    // changes according to overall inflation rate
+    let homeInsurance = inputValues.homeInsurance;
+    let maintenanceCost = inputValues.monthlyMaintenance;
+    let hoaFee = inputValues.hoaCondoFees;
+    // assuming will not change (realistically would but we predict the avg.)
+    const r = inputValues.inflationRate;
 
-  /*
-   * 
-   */
+    // independent to inflation. constant mortgage payment and one time down.
+    totalCost += (calcMortgagePayment() * inputValues.loanTerm * 12) 
+      + inputValues.homePrice*inputValues.downPayment
+      + inputValues.closingCosts;
+   
+    // property tax depends on the growth rate of the house since it is 
+    // determined by fair market value.
+    for (let i = 0; i < inputValues.stayDuration * 12; i++) {
+      // add monthly property tax adjusting for home growth rate
+      totalCost += propertyTax;
+      propertyTax = propertyTax * (1 + inputValues.homeValGrowth/12);
+    }
+
+    // home insurance depends on the cost to replace (rebulid) your home
+    for (let i = 0; i < inputValues.stayDuration * 12; i++) {
+      // add monthly expenditures adjusting for overall inflation rate
+      totalCost = totalCost + homeInsurance + maintenanceCost + hoaFee;
+      homeInsurance = homeInsurance * (1 + r/12);
+      maintenanceCost = maintenanceCost * (1 + r/12);
+      hoaFee = hoaFee * (1 + r/12)
+    }
+
+    return totalCost;
+  } 
+
   function calcRenterCost() {
+    let totalCost = 0;
+    let growingCosts = inputValues.desiredRent + inputValues.renterInsurance 
+      + inputValues.securityDeposit + inputValues.parkingFee 
+      + inputValues.maintenanceFee + inputValues.amenitiesFee;
+    const r = inputValues.inflationRate;
+
+    totalCost += inputValues.securityDeposit + inputValues.petDeposit + inputValues.appFee;
+
+    for (let i = 0; i < inputValues.stayDuration * 12; i++) {
+      totalCost += growingCosts;
+      growingCosts = growingCosts * (1 + r/12);
+    }
+
+    return totalCost;
   }
 
   return (
@@ -163,6 +203,17 @@ function App() {
           <option value={15}>15 year</option>
         </select>
       </div>
+
+      <div className="inputField">
+        <label htmlFor="stayDuration">Years planned to stay</label>
+        <input 
+          type="number" 
+          value={inputValues.stayDuration} 
+          name="stayDuration" 
+          id="stayDuration"
+          onChange={handleInputChange} />
+      </div>
+
     
       <div className="inputField">
         <label htmlFor="homeInsurance">Home insurance</label>
@@ -214,16 +265,7 @@ function App() {
           onChange={handleInputChange} />
       </div>
 
-      <div className="inputField">
-        <label htmlFor="stayDuration">Years planned to stay</label>
-        <input 
-          type="number" 
-          value={inputValues.stayDuration} 
-          name="stayDuration" 
-          id="stayDuration"
-          onChange={handleInputChange} />
-      </div>
-
+      
       <div className="inputField">
         <label htmlFor="inflationRate">Inflation rate</label>
         <input 
@@ -344,11 +386,13 @@ function App() {
       </div>
 
       <h2>Total costs</h2>
-      <h3>Renting cost:</h3>
-      <p>{calcRenterCost()}</p>
+    
       <h3>Owning costs</h3>
       <p>{calcOwnerCost()}</p>
-     
+
+      <h3>Renting cost:</h3>
+      <p>{calcRenterCost()}</p>
+           
     </>
   );
 }
