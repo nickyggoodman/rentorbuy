@@ -160,47 +160,64 @@ function App() {
 
   /*
    * Updates inputValues with what is in the input or with 0 if the input is 
-   * empty (if nothing is entered)
+   * empty, as one would expect. Two state variables are made so that upating
+   * to an empty string "" when changing input won't cause the ending calculation
+   * to take a NaN. going from "9" to "" will cause the variable for calculation
+   * be 0 but the input value to stay at "" while the user prepares to enter a
+   * different value or to move away from the input (see onBlur()).
+   *
+   * different variables will parse the input value in different ways.
    */
   function handleInputChange(e) {
-
-    if (e.target.type == "number") {
-
+    
+    if (e.target.className == "monetaryInput") {
+      
       setDisplayValues({
         ...displayValues,
-        [e.target.id] : e.target.value || ""
+        [e.target.id] : e.target.value.substring(1,) || ""
       });
       setInputValues({
         ...inputValues,
-        [e.target.id] : e.target.valueAsNumber || 0
+        [e.target.id] : Number(e.target.value.substring(1,)) || 0
+      });
+      
+    } else if (e.target.className== "percentageInput"){  
+
+      setDisplayValues({
+        ...displayValues,
+        [e.target.id] : e.target.value.substring(0,e.target.value.length-1) || ""
+      });
+      setInputValues({
+        ...inputValues,
+        [e.target.id] : Number(e.target.value.substring(0,e.target.value.length-1)) || 0
       });
 
     } else {
 
       setDisplayValues({
         ...displayValues,
-        [e.target.id] : e.target.value || ""
+        [e.target.id] : e.target.value.substring(0,e.target.value.length-1) || ""
       });
       setInputValues({
         ...inputValues,
-        [e.target.id] : e.target.value || 0
+        [e.target.id] : Number(e.target.value.substring(0,e.target.value.length-1)) || 0
       });
 
     }
-
   }
 
 
   function handleBlur(e) {
 
-    if (!e.target.value) {
-      setDisplayValues({
+     setDisplayValues({
         ...displayValues,
-        [e.target.id] : 0
+        [e.target.id] : "0"
       });
 
-    }
+  }
 
+  function onFocus(e) {
+    return;
   }
 
   return (
@@ -213,7 +230,7 @@ function App() {
         <label htmlFor="desiredLocation">Desired location</label>
         <input  
           value={displayValues.desiredLocation}
-          type="text"  
+          type="text"
           name="desiredLocation" 
           id="desiredLocation"
           onChange={handleInputChange}/>
@@ -224,10 +241,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="homePrice">Home price</label>
         <input 
-          value={displayValues.homePrice} 
-          type="number"  
+          value={"$" + displayValues.homePrice} 
+          type="text"  
           name="homePrice" 
-          id="homePrice" 
+          id="homePrice" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -236,10 +253,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="downPayment">Down payment</label>
         <input 
-          type="number" 
+          type="text" 
           value={displayValues.downPayment} 
           name="downPayment" 
-          id="downPayment"
+          id="downPayment" className="percentageInput"
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>  
@@ -247,10 +264,11 @@ function App() {
       <div className="inputField">
         <label htmlFor="mortgageRate">Mortgage rate</label>
         <input 
-          type="number" 
-          value={displayValues.mortgageRate} 
+          type="text" 
+          value={displayValues.mortgageRate + "%"} 
           name="mortgageRate" 
-          id="mortgageRate"
+          id="mortgageRate" className="percentageInput"
+          onFocus={(e)=> e.target.setSelectionRange(e.target.value.length-1,e.target.value.length-1)}
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -267,10 +285,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="stayDuration">Years planned to stay</label>
         <input 
-          type="number" 
+          type="text" 
           value={displayValues.stayDuration} 
           name="stayDuration" 
-          id="stayDuration"
+          id="stayDuration" className="genericInput"
           onChange={handleInputChange} 
           onBlur={handleBlur}/>
       </div>
@@ -279,10 +297,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="homeInsurance">Home insurance</label>
         <input 
-          type="number" 
-          value={displayValues.homeInsurance} 
+          type="text" 
+          value={"$" + displayValues.homeInsurance} 
           name="homeInsurance" 
-          id="homeInsurance"
+          id="homeInsurance" className="monetaryInput" 
           onChange={handleInputChange}
           onBlur={handleBlur}/>
       </div>
@@ -290,10 +308,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="closingCosts">Closing cost</label>
         <input 
-          type="number" 
-          value={displayValues.closingCosts} 
+          type="text" 
+          value={"$" + displayValues.closingCosts} 
           name="closingCosts" 
-          id="closingCosts"
+          id="closingCosts" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -301,10 +319,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="hoaCondoFees">HOA/condo fees</label>
         <input 
-          type="number" 
-          value={displayValues.hoaCondoFees} 
+          type="text" 
+          value={"$" + displayValues.hoaCondoFees} 
           name="hoaCondoFees" 
-          id="hoaCondoFees"
+          id="hoaCondoFees" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -312,10 +330,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="monthlyMaintenance">Monthly maintenance</label>
         <input 
-          type="number" 
-          value={displayValues.monthlyMaintenance} 
+          type="text" 
+          value={"$" + displayValues.monthlyMaintenance} 
           name="monthlyMaintenance" 
-          id="monthlyMaintenance" 
+          id="monthlyMaintenance" className="monetaryInput"  
           onChange={handleInputChange} 
           onBlur={handleBlur}/>
       </div>
@@ -323,10 +341,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="propertyTax">Property tax</label>
         <input 
-          type="number" 
-          value={displayValues.propertyTax} 
+          type="text" 
+          value={"$" + displayValues.propertyTax} 
           name="propertyTax" 
-          id="propertyTax"
+          id="propertyTax" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur}/>
       </div>
@@ -336,9 +354,9 @@ function App() {
         <label htmlFor="inflationRate">Inflation rate</label>
         <input 
           value={displayValues.inflationRate} 
-          type="number"  
+          type="text"  
           name="inflationRate" 
-          id="inflationRate" 
+          id="inflationRate" className="percentageInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -347,9 +365,9 @@ function App() {
         <label htmlFor="homeValGrowth">Home value growth rate</label>
         <input 
           value={displayValues.homeValGrowth} 
-          type="number"  
+          type="text"  
           name="homeValGrowth" 
-          id="homeValGrowth" 
+          id="homeValGrowth" className="percentageInput"
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -366,10 +384,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="desiredRent">Desired rent</label>
         <input 
-          type="number" 
-          value={displayValues.desiredRent} 
+          type="text" 
+          value={"$" + displayValues.desiredRent} 
           name="desiredRent" 
-          id="desiredRent" 
+          id="desiredRent" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -377,10 +395,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="renterInsurance">Rent insurance</label>
         <input 
-          type="number" 
-          value={displayValues.renterInsurance} 
+          type="text" 
+          value={"$" + displayValues.renterInsurance} 
           name="renterInsurance" 
-          id="renterInsurance"
+          id="renterInsurance" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -388,10 +406,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="securityDeposit">Security deposit</label>
         <input 
-          type="number" 
-          value={displayValues.securityDeposit} 
+          type="text" 
+          value={"$" + displayValues.securityDeposit} 
           name="securityDeposit" 
-          id="securityDeposit"
+          id="securityDeposit" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -399,10 +417,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="petDeposit">Pet deposit</label>
         <input 
-          type="number" 
-          value={displayValues.petDeposit} 
+          type="text" 
+          value={"$" + displayValues.petDeposit} 
           name="petDeposit" 
-          id="petDeposit"
+          id="petDeposit" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -410,10 +428,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="utilIncluded">Utilities included</label>
         <input 
-          type="number" 
-          value={displayValues.utilIncluded} 
+          type="text" 
+          value={"$" + displayValues.utilIncluded} 
           name="utilIncluded" 
-          id="utilIncluded"
+          id="utilIncluded" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -421,10 +439,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="appFee">Application fee</label>
         <input 
-          type="number" 
-          value={displayValues.appFee} 
+          type="text" 
+          value={"$" + displayValues.appFee} 
           name="appFee" 
-          id="appFee"
+          id="appFee" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -432,10 +450,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="parkingFee">Parking fee</label>
         <input 
-          type="number" 
-          value={displayValues.parkingFee} 
+          type="text" 
+          value={"$" + displayValues.parkingFee} 
           name="parkingFee" 
-          id="parkingFee"
+          id="parkingFee" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -443,10 +461,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="maintenanceFee">Maintenance fee</label>
         <input 
-          type="number" 
-          value={displayValues.maintenanceFee} 
+          type="text" 
+          value={"$" + displayValues.maintenanceFee} 
           name="maintenanceFee" 
-          id="maintenanceFee"
+          id="maintenanceFee" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
@@ -454,10 +472,10 @@ function App() {
       <div className="inputField">
         <label htmlFor="amenitiesFee">Amenities fee</label>
         <input 
-          type="number" 
-          value={displayValues.amenitiesFee} 
+          type="text" 
+          value={"$" + displayValues.amenitiesFee} 
           name="amenitiesFee" 
-          id="amenitiesFee"
+          id="amenitiesFee" className="monetaryInput" 
           onChange={handleInputChange} 
           onBlur={handleBlur} />
       </div>
