@@ -33,27 +33,27 @@ function App() {
   const [displayValues, setDisplayValues] = useState(
     {
       desiredLocation: "",
-      homePrice: 500000,
-      downPayment: 0.20,
-      mortgageRate: 0.05,
-      loanTerm: 30,
-      inflationRate: 0,
-      homeValGrowth: 0,
-      homeInsurance: 0,
-      closingCosts: 0,
-      hoaCondoFees: 0,
-      monthlyMaintenance: 0,
-      propertyTax: 0,
-      stayDuration: 30,
-      desiredRent: 0,
-      renterInsurance: 0,
-      securityDeposit: 0,
-      petDeposit: 0,
-      utilIncluded: 0,
-      appFee: 0,
-      parkingFee: 0,
-      maintenanceFee: 0,
-      amenitiesFee: 0,
+      homePrice: "",
+      downPayment: "",
+      mortgageRate: "",
+      loanTerm: "",
+      inflationRate: "",
+      homeValGrowth: "",
+      homeInsurance: "",
+      closingCosts: "",
+      hoaCondoFees: "",
+      monthlyMaintenance: "",
+      propertyTax: "",
+      stayDuration: "",
+      desiredRent: "",
+      renterInsurance: "",
+      securityDeposit: "",
+      petDeposit: "",
+      utilIncluded: "",
+      appFee: "",
+      parkingFee: "",
+      maintenanceFee: "",
+      amenitiesFee: "",
     }
   );
 
@@ -164,19 +164,30 @@ function App() {
    *
    */
   function handleInputChange(e) {
-    
-    /* 
-     * different variables will parse the input value in different ways.
-     */
+   
+    // different forms of input are parsed appropriately 
     if (e.target.className == "monetaryInput") {
+    
+      // parse monetary input with no decimals
+      const reCurrency = new RegExp("\\d*", "g");
+      const matchArr = e.target.value.match(reCurrency);
+      const inputNum = matchArr.join("");
 
+      // currency can later be an option
+      const currencyOptions = {style: 'currency', currency: 'USD', trailingZeroDisplay: 'stripIfInteger'}
+      // region can later be an option
+      const currencyFormatter = new Intl.NumberFormat('en-US', currencyOptions);
+
+      // set the display value to the parsed number re-formatted
       setDisplayValues({
         ...displayValues,
-        [e.target.id] : e.target.value.substring(1,) || ""
+        [e.target.id] : inputNum ? currencyFormatter.format(inputNum) : "$"
       });
+
+      // set the input that was parsed above
       setInputValues({
         ...inputValues,
-        [e.target.id] : Number(e.target.value.substring(1,)) || 0
+        [e.target.id] : Number(inputNum) || 0
       });
       
     } else if (e.target.className== "percentageInput"){  
@@ -194,11 +205,11 @@ function App() {
 
       setDisplayValues({
         ...displayValues,
-        [e.target.id] : e.target.value.substring(0,e.target.value.length-1) || ""
+        [e.target.id] : e.target.value || ""
       });
       setInputValues({
         ...inputValues,
-        [e.target.id] : Number(e.target.value.substring(0,e.target.value.length-1)) || 0
+        [e.target.id] : Number(e.target.value) || 0
       });
 
     }
@@ -207,10 +218,10 @@ function App() {
 
   function handleBlur(e) {
 
-    if (inputValues[e.target.id] == 0) {
+    if (inputValues[e.target.id] == 0 && e.target.className=="monetaryInput") {
      setDisplayValues({
         ...displayValues,
-        [e.target.id] : "0"
+        [e.target.id] : "$0"
       });
     }
 
@@ -241,7 +252,7 @@ function App() {
       <div className="inputField">
         <label htmlFor="homePrice">Home price</label>
         <input 
-          value={"$" + displayValues.homePrice} 
+          value={displayValues.homePrice} 
           type="text"  
           name="homePrice" 
           id="homePrice" className="monetaryInput" 
@@ -258,6 +269,7 @@ function App() {
           name="downPayment" 
           id="downPayment" className="percentageInput"
           onChange={handleInputChange} 
+          onFocus={(e)=> e.target.setSelectionRange(e.target.value.length-1,e.target.value.length-1)}
           onBlur={handleBlur} />
       </div>  
 
@@ -265,7 +277,7 @@ function App() {
         <label htmlFor="mortgageRate">Mortgage rate</label>
         <input 
           type="text" 
-          value={displayValues.mortgageRate + "%"} 
+          value={displayValues.mortgageRate} 
           name="mortgageRate" 
           id="mortgageRate" className="percentageInput"
           onFocus={(e)=> e.target.setSelectionRange(e.target.value.length-1,e.target.value.length-1)}
@@ -298,7 +310,7 @@ function App() {
         <label htmlFor="homeInsurance">Home insurance</label>
         <input 
           type="text" 
-          value={"$" + displayValues.homeInsurance} 
+          value={displayValues.homeInsurance} 
           name="homeInsurance" 
           id="homeInsurance" className="monetaryInput" 
           onChange={handleInputChange}
@@ -309,7 +321,7 @@ function App() {
         <label htmlFor="closingCosts">Closing cost</label>
         <input 
           type="text" 
-          value={"$" + displayValues.closingCosts} 
+          value={displayValues.closingCosts} 
           name="closingCosts" 
           id="closingCosts" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -320,7 +332,7 @@ function App() {
         <label htmlFor="hoaCondoFees">HOA/condo fees</label>
         <input 
           type="text" 
-          value={"$" + displayValues.hoaCondoFees} 
+          value={displayValues.hoaCondoFees} 
           name="hoaCondoFees" 
           id="hoaCondoFees" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -331,7 +343,7 @@ function App() {
         <label htmlFor="monthlyMaintenance">Monthly maintenance</label>
         <input 
           type="text" 
-          value={"$" + displayValues.monthlyMaintenance} 
+          value={displayValues.monthlyMaintenance} 
           name="monthlyMaintenance" 
           id="monthlyMaintenance" className="monetaryInput"  
           onChange={handleInputChange} 
@@ -342,7 +354,7 @@ function App() {
         <label htmlFor="propertyTax">Property tax</label>
         <input 
           type="text" 
-          value={"$" + displayValues.propertyTax} 
+          value={displayValues.propertyTax} 
           name="propertyTax" 
           id="propertyTax" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -385,7 +397,7 @@ function App() {
         <label htmlFor="desiredRent">Desired rent</label>
         <input 
           type="text" 
-          value={"$" + displayValues.desiredRent} 
+          value={displayValues.desiredRent} 
           name="desiredRent" 
           id="desiredRent" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -396,7 +408,7 @@ function App() {
         <label htmlFor="renterInsurance">Rent insurance</label>
         <input 
           type="text" 
-          value={"$" + displayValues.renterInsurance} 
+          value={displayValues.renterInsurance} 
           name="renterInsurance" 
           id="renterInsurance" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -407,7 +419,7 @@ function App() {
         <label htmlFor="securityDeposit">Security deposit</label>
         <input 
           type="text" 
-          value={"$" + displayValues.securityDeposit} 
+          value={displayValues.securityDeposit} 
           name="securityDeposit" 
           id="securityDeposit" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -418,7 +430,7 @@ function App() {
         <label htmlFor="petDeposit">Pet deposit</label>
         <input 
           type="text" 
-          value={"$" + displayValues.petDeposit} 
+          value={displayValues.petDeposit} 
           name="petDeposit" 
           id="petDeposit" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -429,7 +441,7 @@ function App() {
         <label htmlFor="utilIncluded">Utilities included</label>
         <input 
           type="text" 
-          value={"$" + displayValues.utilIncluded} 
+          value={displayValues.utilIncluded} 
           name="utilIncluded" 
           id="utilIncluded" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -440,7 +452,7 @@ function App() {
         <label htmlFor="appFee">Application fee</label>
         <input 
           type="text" 
-          value={"$" + displayValues.appFee} 
+          value={displayValues.appFee} 
           name="appFee" 
           id="appFee" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -451,7 +463,7 @@ function App() {
         <label htmlFor="parkingFee">Parking fee</label>
         <input 
           type="text" 
-          value={"$" + displayValues.parkingFee} 
+          value={displayValues.parkingFee} 
           name="parkingFee" 
           id="parkingFee" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -462,7 +474,7 @@ function App() {
         <label htmlFor="maintenanceFee">Maintenance fee</label>
         <input 
           type="text" 
-          value={"$" + displayValues.maintenanceFee} 
+          value={displayValues.maintenanceFee} 
           name="maintenanceFee" 
           id="maintenanceFee" className="monetaryInput" 
           onChange={handleInputChange} 
@@ -473,7 +485,7 @@ function App() {
         <label htmlFor="amenitiesFee">Amenities fee</label>
         <input 
           type="text" 
-          value={"$" + displayValues.amenitiesFee} 
+          value={displayValues.amenitiesFee} 
           name="amenitiesFee" 
           id="amenitiesFee" className="monetaryInput" 
           onChange={handleInputChange} 
