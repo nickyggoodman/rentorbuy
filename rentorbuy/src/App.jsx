@@ -160,18 +160,16 @@ function App() {
 
   /*
    * Updates inputValues with what is in the input or with 0 if the input is 
-   * empty, as one would expect. Two state variables are made so that upating
-   * to an empty string "" when changing input won't cause the ending calculation
-   * to take a NaN. going from "9" to "" will cause the variable for calculation
-   * be 0 but the input value to stay at "" while the user prepares to enter a
-   * different value or to move away from the input (see onBlur()).
+   * empty, as one would expect.    
    *
-   * different variables will parse the input value in different ways.
    */
   function handleInputChange(e) {
     
+    /* 
+     * different variables will parse the input value in different ways.
+     */
     if (e.target.className == "monetaryInput") {
-      
+
       setDisplayValues({
         ...displayValues,
         [e.target.id] : e.target.value.substring(1,) || ""
@@ -209,10 +207,12 @@ function App() {
 
   function handleBlur(e) {
 
+    if (inputValues[e.target.id] == 0) {
      setDisplayValues({
         ...displayValues,
         [e.target.id] : "0"
       });
+    }
 
   }
 
