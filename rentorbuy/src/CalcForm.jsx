@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function CalcForm() {
+function CalcForm({updateInputValue}) {
 
   const [displayValues, setDisplayValues] = useState(
     {
@@ -46,50 +46,27 @@ function CalcForm() {
         ...displayValues,
         [e.target.id] : "$" + display
       });
-      setInputValues({
-        ...inputValues,
-        [e.target.id] : value || 0
-      });
-      
+
+      updateInputValue(e.target.id, value || 0)
+
     } else if (e.target.className == "percentageInput"){  
 
       setDisplayValues({
         ...displayValues,
         [e.target.id] : display + "%"
       });
-      setInputValues({
-        ...inputValues,
-        [e.target.id] : value/100 || 0
-      });
       
+      updateInputValue(e.target.id, value/100 || 0)
+
     } else {
       
       setDisplayValues({
         ...displayValues,
         [e.target.id] : display
       });
-      setInputValues({
-        ...inputValues,
-        [e.target.id] : value || 0
-      });
 
+      updateInputValue(e.target.id, value || 0)
     }
-  }
-
-
-  function handleBlur(e) {
-
-    if (inputValues[e.target.id] == 0 && e.target.className=="monetaryInput") {
-     setDisplayValues({
-        ...displayValues,
-        [e.target.id] : "$0"
-      });
-    }
-
-  }
-
-  function onFocus(e) {
-    return;
   }
 
   return (
@@ -116,9 +93,9 @@ function CalcForm() {
           value={displayValues.homePrice} 
           type="text"  
           name="homePrice" 
-          id="homePrice" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          id="homePrice" 
+          className="monetaryInput" 
+          onChange={handleInputChange} />
       </div>
 
 
@@ -130,8 +107,8 @@ function CalcForm() {
           name="downPayment" 
           id="downPayment" className="percentageInput"
           onChange={handleInputChange} 
-          onFocus={(e)=> e.target.setSelectionRange(e.target.value.length-1,e.target.value.length-1)}
-          onBlur={handleBlur} />
+          onFocus={(e)=> e.target.setSelectionRange(e.target.value.length-1,e.target.value.length-1)}/>
+
       </div>  
 
       <div className="inputField">
@@ -142,8 +119,8 @@ function CalcForm() {
           name="mortgageRate" 
           id="mortgageRate" className="percentageInput"
           onFocus={(e)=> e.target.setSelectionRange(e.target.value.length-1,e.target.value.length-1)}
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -162,8 +139,8 @@ function CalcForm() {
           value={displayValues.stayDuration} 
           name="stayDuration" 
           id="stayDuration" className="genericInput"
-          onChange={handleInputChange} 
-          onBlur={handleBlur}/>
+          onChange={handleInputChange} />
+
       </div>
 
     
@@ -174,8 +151,8 @@ function CalcForm() {
           value={displayValues.homeInsurance} 
           name="homeInsurance" 
           id="homeInsurance" className="monetaryInput" 
-          onChange={handleInputChange}
-          onBlur={handleBlur}/>
+          onChange={handleInputChange}/>
+
       </div>
 
       <div className="inputField">
@@ -185,8 +162,8 @@ function CalcForm() {
           value={displayValues.closingCosts} 
           name="closingCosts" 
           id="closingCosts" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -196,8 +173,8 @@ function CalcForm() {
           value={displayValues.hoaCondoFees} 
           name="hoaCondoFees" 
           id="hoaCondoFees" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -207,8 +184,8 @@ function CalcForm() {
           value={displayValues.monthlyMaintenance} 
           name="monthlyMaintenance" 
           id="monthlyMaintenance" className="monetaryInput"  
-          onChange={handleInputChange} 
-          onBlur={handleBlur}/>
+          onChange={handleInputChange} />
+
       </div>
     
       <div className="inputField">
@@ -218,8 +195,8 @@ function CalcForm() {
           value={displayValues.propertyTax} 
           name="propertyTax" 
           id="propertyTax" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur}/>
+          onChange={handleInputChange} />
+
       </div>
 
       
@@ -230,8 +207,8 @@ function CalcForm() {
           type="text"  
           name="inflationRate" 
           id="inflationRate" className="percentageInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -241,8 +218,8 @@ function CalcForm() {
           type="text"  
           name="homeValGrowth" 
           id="homeValGrowth" className="percentageInput"
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
       
     {
@@ -261,8 +238,8 @@ function CalcForm() {
           value={displayValues.desiredRent} 
           name="desiredRent" 
           id="desiredRent" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -272,8 +249,8 @@ function CalcForm() {
           value={displayValues.renterInsurance} 
           name="renterInsurance" 
           id="renterInsurance" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -283,8 +260,8 @@ function CalcForm() {
           value={displayValues.securityDeposit} 
           name="securityDeposit" 
           id="securityDeposit" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -294,8 +271,8 @@ function CalcForm() {
           value={displayValues.petDeposit} 
           name="petDeposit" 
           id="petDeposit" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -305,8 +282,8 @@ function CalcForm() {
           value={displayValues.utilIncluded} 
           name="utilIncluded" 
           id="utilIncluded" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -316,8 +293,8 @@ function CalcForm() {
           value={displayValues.appFee} 
           name="appFee" 
           id="appFee" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -327,8 +304,8 @@ function CalcForm() {
           value={displayValues.parkingFee} 
           name="parkingFee" 
           id="parkingFee" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -338,8 +315,8 @@ function CalcForm() {
           value={displayValues.maintenanceFee} 
           name="maintenanceFee" 
           id="maintenanceFee" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
 
       <div className="inputField">
@@ -349,13 +326,13 @@ function CalcForm() {
           value={displayValues.amenitiesFee} 
           name="amenitiesFee" 
           id="amenitiesFee" className="monetaryInput" 
-          onChange={handleInputChange} 
-          onBlur={handleBlur} />
+          onChange={handleInputChange} />
+
       </div>
     </>
   );
 
 }
 
-
+export default CalcForm;
 
