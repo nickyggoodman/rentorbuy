@@ -49,6 +49,52 @@ function App() {
 
   } 
 
+  function genOwnerCostArr() {
+    let costArr = [];
+    // changes according to fair market value growth rate
+    let propertyTax = inputValues.propertyTax;
+    // changes according to overall inflation rate
+    let homeInsurance = inputValues.homeInsurance;
+    let maintenanceCost = inputValues.monthlyMaintenance;
+    let hoaFee = inputValues.hoaCondoFees;
+    // assuming will not change (realistically would but we predict the avg.)
+    const r = inputValues.inflationRate;
+
+    // independent to inflation. constant mortgage payment and one time down.
+    // totalCost += (calcMortgagePayment() * inputValues.loanTerm * 12) 
+    // + inputValues.homePrice*inputValues.downPayment
+    //  + inputValues.closingCosts;
+   
+    costArr.push(
+      (calcMortgagePayment() * inputValues.loanTerm * 12) 
+      + inputValues.homePrice*inputValues.downPayment
+    );
+
+    // property tax depends on the growth rate of the house since it is 
+    // determined by fair market value.
+    for (let i = 0; i < inputValues.stayDuration * 12; i++) {
+      // add monthly property tax adjusting for home growth rate
+      totalCost += propertyTax;
+      propertyTax = propertyTax * (1 + inputValues.homeValGrowth/12);
+    }
+
+    // home insurance depends on the cost to replace (rebulid) your home
+    for (let i = 0; i < inputValues.stayDuration * 12; i++) {
+      // add monthly expenditures adjusting for overall inflation rate
+      totalCost = totalCost + homeInsurance + maintenanceCost + hoaFee;
+      homeInsurance = homeInsurance * (1 + r/12);
+      maintenanceCost = maintenanceCost * (1 + r/12);
+      hoaFee = hoaFee * (1 + r/12)
+    }
+
+
+    return; 
+  }
+
+  function genRenterCostArr() {
+    return; 
+  }
+
   /*
    *
    */
@@ -104,6 +150,8 @@ function App() {
 
     return totalCost.toFixed(2);
   }
+
+
   
 
   return (

@@ -127,7 +127,6 @@ function CalcForm({updateInputValue}) {
         <label htmlFor="loanTerm">Loan term</label>
         <select name="loanTerm" id="loanTerm" onChange={handleInputChange}>
           <option value={30}>30 year</option>
-          <option value={20}>20 year</option>
           <option value={15}>15 year</option>
         </select>
       </div>
