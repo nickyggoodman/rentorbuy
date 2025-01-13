@@ -71,8 +71,6 @@ function CalcForm({updateInputValue}) {
 
   return (
     <>
-      <h1>Rent or Buy?</h1>
-    
       <h2>Location</h2>
 
       <div className="inputField">
