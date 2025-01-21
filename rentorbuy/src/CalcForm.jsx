@@ -1,34 +1,34 @@
 import { useState } from 'react'
 
-function CalcForm({updateInputValue}) {
-
+function CalcForm({updateInputValue, inputValues}) {
+  
   const [displayValues, setDisplayValues] = useState(
     {
-      desiredLocation: "",
-      homePrice: "$",
-      downPayment: "%",
-      mortgageRate: "%",
-      loanTerm: "",
-      inflationRate: "%",
-      homeValGrowth: "%",
-      homeInsurance: "$",
-      closingCosts: "$",
-      hoaCondoFees: "$",
-      monthlyMaintenance: "$",
-      propertyTax: "$",
-      stayDuration: "",
-      desiredRent: "$",
-      renterInsurance: "$",
-      securityDeposit: "$",
-      petDeposit: "$",
-      utilIncluded: "$",
-      appFee: "$",
-      parkingFee: "$",
-      maintenanceFee: "$",
-      amenitiesFee: "$",
+      desiredLocation: inputValues.desiredLocation,
+      homePrice: "$" + inputValues.homePrice,
+      downPayment: (inputValues.downPayment * 100) + "%",
+      mortgageRate: (inputValues.mortgageRate * 100) + "%",
+      loanTerm: "" + inputValues.loanTerm,
+      inflationRate: (inputValues.inflationRate * 100) + "%",
+      homeValGrowth: (inputValues.homeValGrowth * 100) + "%",
+      homeInsurance: "$" + inputValues.homeInsurance,
+      closingCosts: "$" + inputValues.closingCosts,
+      hoaCondoFees: "$" + inputValues.hoaCondoFees,
+      monthlyMaintenance: "$" + inputValues.monthlyMaintenance,
+      propertyTax: "$" + inputValues.propertyTax,
+      stayDuration: "" + inputValues.stayDuration,
+      desiredRent: "$" + inputValues.desiredRent,
+      renterInsurance: "$" + inputValues.renterInsurance,
+      securityDeposit: "$" + inputValues.securityDeposit,
+      petDeposit: "$" + inputValues.petDeposit,
+      utilIncluded: "$" + inputValues.utilIncluded,
+      appFee: "$" + inputValues.appFee,
+      parkingFee: "$" + inputValues.parkingFee,
+      maintenanceFee: "$" + inputValues.maintenanceFee,
+      amenitiesFee: "$" + inputValues.amenitiesFee,
     }
   );
-
+  
   function handleInputChange(e) {
    
     const formatter = new Intl.NumberFormat();
@@ -41,7 +41,6 @@ function CalcForm({updateInputValue}) {
 
     if (e.target.className == "monetaryInput") {
     
-
       setDisplayValues({
         ...displayValues,
         [e.target.id] : "$" + display
@@ -58,14 +57,24 @@ function CalcForm({updateInputValue}) {
       
       updateInputValue(e.target.id, value/100 || 0)
 
-    } else {
-      
+    } else if (e.target.className == "numberInput"){
+ 
       setDisplayValues({
         ...displayValues,
         [e.target.id] : display
       });
 
       updateInputValue(e.target.id, value || 0)
+
+    } else {
+     
+      setDisplayValues({
+        ...displayValues,
+        [e.target.id] : e.target.value
+      });
+
+      updateInputValue(e.target.id, value || "")
+
     }
   }
 
@@ -123,7 +132,11 @@ function CalcForm({updateInputValue}) {
 
       <div className="inputField">
         <label htmlFor="loanTerm">Loan term</label>
-        <select name="loanTerm" id="loanTerm" onChange={handleInputChange}>
+        <select 
+          name="loanTerm" 
+          id="loanTerm" 
+          className = "numberInput"
+          onChange={handleInputChange}>
           <option value={30}>30 year</option>
           <option value={15}>15 year</option>
         </select>
@@ -135,7 +148,8 @@ function CalcForm({updateInputValue}) {
           type="text" 
           value={displayValues.stayDuration} 
           name="stayDuration" 
-          id="stayDuration" className="genericInput"
+          id="stayDuration" 
+          className="numberInput"
           onChange={handleInputChange} />
 
       </div>

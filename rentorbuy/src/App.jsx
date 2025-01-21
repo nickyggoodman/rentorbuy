@@ -28,21 +28,21 @@ function App() {
   const [inputValues, setInputValues] = useState(
     {
       desiredLocation: "",
-      homePrice: 0,
-      downPayment: 0,
-      mortgageRate: 0,
+      homePrice: 500000,
+      downPayment: 0.20,
+      mortgageRate: 0.06,
       loanTerm: 30,
-      inflationRate: 0,
-      homeValGrowth: 0,
+      inflationRate: 0.02,
+      homeValGrowth: 0.04,
       homeInsurance: 0,
       closingCosts: 0,
       hoaCondoFees: 0,
       monthlyMaintenance: 0,
       propertyTax: 0,
-      stayDuration: 0,
-      desiredRent: 0,
+      stayDuration: 30,
+      desiredRent: 2160,
       renterInsurance: 0,
-      securityDeposit: 0,
+      securityDeposit: 2160,
       petDeposit: 0,
       utilIncluded: 0,
       appFee: 0,
@@ -106,11 +106,13 @@ function App() {
     let costArr = [];
 
     let growingCosts = inputValues.desiredRent + inputValues.renterInsurance 
-      + inputValues.securityDeposit + inputValues.parkingFee 
+      + inputValues.parkingFee 
       + inputValues.maintenanceFee + inputValues.amenitiesFee;
     const r = inputValues.inflationRate;
 
-    costArr.push(inputValues.securityDeposit + inputValues.petDeposit + inputValues.appFee + growingCosts);
+    //negate one-times for the sake of representation. These are calculated 
+    //in the total calculation in calcRenterCost()
+    //costArr.push(inputValues.securityDeposit + inputValues.petDeposit + inputValues.appFee + growingCosts);
 
     for (let i = 1; i < inputValues.stayDuration * 12; i++) {
       growingCosts = growingCosts * (1 + r/12);
@@ -161,13 +163,16 @@ function App() {
 
   function calcRenterCost() {
     let totalCost = 0;
+    // variable costs
     let growingCosts = inputValues.desiredRent + inputValues.renterInsurance 
-      + inputValues.securityDeposit + inputValues.parkingFee 
+      + inputValues.parkingFee 
       + inputValues.maintenanceFee + inputValues.amenitiesFee;
     const r = inputValues.inflationRate;
 
+    // fixed, one-time costs. 
     totalCost += inputValues.securityDeposit + inputValues.petDeposit + inputValues.appFee;
 
+    // totaling with inflation
     for (let i = 0; i < inputValues.stayDuration * 12; i++) {
       totalCost += growingCosts;
       growingCosts = growingCosts * (1 + r/12);
@@ -189,7 +194,6 @@ function App() {
       }
       i++;
     }
-    console.log("break even month: " + i);
     return i;
   }
 
@@ -204,7 +208,6 @@ function App() {
       ctx.lineWidth = 2;
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
       ctx.setLineDash([10, 5]);
-      console.log("intersection at " + options.intersection);
       ctx.moveTo(x.getPixelForValue(options.intersection), top);
       ctx.lineTo(x.getPixelForValue(options.intersection), bottom);
       ctx.stroke();
@@ -222,6 +225,7 @@ function App() {
             [k] : v
           })
         }}
+        inputValues = {{...inputValues}}
       />
 
       <Line 
