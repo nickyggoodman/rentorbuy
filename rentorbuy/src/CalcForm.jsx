@@ -5,75 +5,101 @@ function CalcForm({updateInputValue, inputValues}) {
   const [displayValues, setDisplayValues] = useState(
     {
       desiredLocation: inputValues.desiredLocation,
-      homePrice: "$" + inputValues.homePrice,
-      downPayment: (inputValues.downPayment * 100) + "%",
-      mortgageRate: (inputValues.mortgageRate * 100) + "%",
-      loanTerm: "" + inputValues.loanTerm,
-      inflationRate: (inputValues.inflationRate * 100) + "%",
-      homeValGrowth: (inputValues.homeValGrowth * 100) + "%",
-      homeInsurance: "$" + inputValues.homeInsurance,
-      closingCosts: "$" + inputValues.closingCosts,
-      hoaCondoFees: "$" + inputValues.hoaCondoFees,
-      monthlyMaintenance: "$" + inputValues.monthlyMaintenance,
-      propertyTax: "$" + inputValues.propertyTax,
-      stayDuration: "" + inputValues.stayDuration,
-      desiredRent: "$" + inputValues.desiredRent,
-      renterInsurance: "$" + inputValues.renterInsurance,
-      securityDeposit: "$" + inputValues.securityDeposit,
-      petDeposit: "$" + inputValues.petDeposit,
-      utilIncluded: "$" + inputValues.utilIncluded,
-      appFee: "$" + inputValues.appFee,
-      parkingFee: "$" + inputValues.parkingFee,
-      maintenanceFee: "$" + inputValues.maintenanceFee,
-      amenitiesFee: "$" + inputValues.amenitiesFee,
+      homePrice: "$" + formatNumberInString(inputValues.homePrice.toString()),
+      downPayment: formatNumberInString((inputValues.downPayment * 100).toString()) + "%",
+      mortgageRate: formatNumberInString((inputValues.mortgageRate * 100).toString()) + "%",
+      loanTerm: "" + formatNumberInString(inputValues.loanTerm.toString()),
+      inflationRate: formatNumberInString((inputValues.inflationRate * 100).toString()) + "%",
+      homeValGrowth:  formatNumberInString((inputValues.homeValGrowth * 100).toString()) + "%",      homeInsurance: "$" + inputValues.homeInsurance,
+      closingCosts: "$" + formatNumberInString(inputValues.closingCosts.toString()),
+      hoaCondoFees: "$" + formatNumberInString(inputValues.hoaCondoFees.toString()),
+      monthlyMaintenance: "$" + formatNumberInString(inputValues.monthlyMaintenance.toString()),
+      propertyTax: "$" + formatNumberInString(inputValues.propertyTax.toString()),
+      stayDuration: "" + formatNumberInString(inputValues.stayDuration.toString()),
+      desiredRent: "$" + formatNumberInString(inputValues.desiredRent.toString()),
+      renterInsurance: "$" + formatNumberInString(inputValues.renterInsurance.toString()),
+      securityDeposit: "$" + formatNumberInString(inputValues.securityDeposit.toString()),
+      petDeposit: "$" + formatNumberInString(inputValues.petDeposit.toString()),
+      utilIncluded: "$" + formatNumberInString(inputValues.utilIncluded.toString()),
+      appFee: "$" + formatNumberInString(inputValues.appFee.toString()),
+      parkingFee: "$" + formatNumberInString(inputValues.parkingFee.toString()),
+      maintenanceFee: "$" + formatNumberInString(inputValues.maintenanceFee.toString()),
+      amenitiesFee: "$" + formatNumberInString(inputValues.amenitiesFee.toString()),
     }
   );
-  
-  function handleInputChange(e) {
-   
+
+  /*
+   * get the formatted string of the input (number) from the input field.
+   * e.g., "500,0000.45" --> "5,000,000.45"
+   * e.g., "5000000.45" --> 5,000,000.45
+   */
+  function formatNumberInString(str) {
     const formatter = new Intl.NumberFormat();
     const regex = /\d*/g;
-    const arr = e.target.value.split(".");
+    const arr = str.split(".");
     const integer = arr[0].match(regex).join("");
     const decimal = arr.length > 1 ? arr[1].match(regex).join("") : "";
-    const display = (integer ? formatter.format(integer) : "") + (e.target.value[arr[0].length] == "." ? "." :  "") + decimal; 
+    const display = (integer ? formatter.format(integer) : "") + (str[arr[0].length] == "." ? "." :  "") + decimal; 
+
+    return display;
+  }
+  
+  /*
+   * get the number from within a string, assuming it's coming from one of
+   * the pre-formatted inputs and not a complete mess of characters.
+   * e.g., '$5,523.67' -> 5523.67
+   */
+  function extractNumberInString(str) {
+    const regex = /\d*/g;
+    const arr = str.split(".");
+    const integer = arr[0].match(regex).join("");
+    const decimal = arr.length > 1 ? arr[1].match(regex).join("") : "";
     const value = Number(integer + "." +  decimal);
 
+    return value;
+  }
+
+
+  
+  function handleInputChange(e) {
+
+    const str = e.target.value;
+   
     if (e.target.className == "monetaryInput") {
     
       setDisplayValues({
         ...displayValues,
-        [e.target.id] : "$" + display
+        [e.target.id] : "$" + formatNumberInString(str)
       });
 
-      updateInputValue(e.target.id, value || 0)
+      updateInputValue(e.target.id, extractNumberInString(str) || 0)
 
     } else if (e.target.className == "percentageInput"){  
 
       setDisplayValues({
         ...displayValues,
-        [e.target.id] : display + "%"
+        [e.target.id] : formatNumberInString(str) + "%"
       });
       
-      updateInputValue(e.target.id, value/100 || 0)
+      updateInputValue(e.target.id, extractNumberInString(str)/100 || 0)
 
     } else if (e.target.className == "numberInput"){
  
       setDisplayValues({
         ...displayValues,
-        [e.target.id] : display
+        [e.target.id] : formatNumberInString(str)
       });
 
-      updateInputValue(e.target.id, value || 0)
+      updateInputValue(e.target.id, extractNumberInString(str) || 0)
 
     } else {
      
       setDisplayValues({
         ...displayValues,
-        [e.target.id] : e.target.value
+        [e.target.id] : str
       });
 
-      updateInputValue(e.target.id, value || "")
+      updateInputValue(e.target.id, str || "")
 
     }
   }

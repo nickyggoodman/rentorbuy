@@ -114,6 +114,7 @@ function App() {
     //in the total calculation in calcRenterCost()
     //costArr.push(inputValues.securityDeposit + inputValues.petDeposit + inputValues.appFee + growingCosts);
 
+    costArr[0] = growingCosts;
     for (let i = 1; i < inputValues.stayDuration * 12; i++) {
       growingCosts = growingCosts * (1 + r/12);
       costArr.push(growingCosts);
@@ -231,11 +232,44 @@ function App() {
       <Line 
         options = {{
           plugins: {
+            tooltip: {
+              callbacks: {
+                beforeTitle: function(context) {
+                  return "Month"
+                }
+              }
+            },
             lineAtBreakEven: {
               intersection: breakEvenMonth() 
             }
           },
           responsive: true,
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Years'
+              },
+              offset: false,
+              type: 'linear',
+              ticks: {
+                autoSkip: false,
+                stepSize: 1,
+                callback: function(val, index) {
+                  return (index + 1) % 12 === 0 ? this.getLabelForValue(val)/12 : ''; 
+                },
+              },
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Cost',
+              },
+            }
+          },
           elements: {
             point: {
               radius: 0,
@@ -244,19 +278,18 @@ function App() {
               hitRadius: 4,
             }
           }
-        }}
-        plugins = {[lineAtBreakEven]}
+        }} plugins = {[lineAtBreakEven]}
         data ={{
           labels: Array(inputValues.stayDuration*12).fill().map((_, i) => (i+1)),
           datasets: [
             {
-              label: 'Owner costs', 
+              label: 'Monthly Owner Costs', 
               data: genOwnerCostArr(),
               borderColor: 'red',
               backgroundColor: 'red',
             },
             {
-              label: 'Renter costs',
+              label: 'Monthly Renter Costs',
               data: genRenterCostArr(),
               borderColor: 'green',
               backgroundColor: 'green',
