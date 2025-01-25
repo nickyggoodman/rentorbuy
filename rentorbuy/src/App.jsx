@@ -2,6 +2,7 @@ import './App.css'
 import CalcForm from './CalcForm.jsx'
 import { useState } from 'react'
 import { Line } from 'react-chartjs-2'
+import { formatNumberInString, extractNumberInString } from './number-formatter';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -213,9 +214,40 @@ function App() {
       ctx.lineTo(x.getPixelForValue(options.intersection), bottom);
       ctx.stroke();
       ctx.closePath();
+      ctx.restore();
     }
   
   } 
+
+  const verticalHoverLine = {
+    id: 'verticalHoverLine',
+    afterDatasetsDraw(chart, args, plugins) {
+      const { ctx, tooltip, chartArea: {top, bottom, left, right, width, height},
+        scales: {x, y} } = chart;
+
+      if (tooltip._active.length > 0) {
+        const xCoor = x.getPixelForValue(tooltip.dataPoints[0].dataIndex+1);
+        let yCoor;
+        
+        if (y.getPixelForValue(tooltip.dataPoints[0].parsed.y) > y.getPixelForValue(tooltip.dataPoints[1].parsed.y)) {
+          yCoor = y.getPixelForValue(tooltip.dataPoints[1].parsed.y);
+        } else {
+          yCoor = y.getPixelForValue(tooltip.dataPoints[0].parsed.y);
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.moveTo(xCoor, yCoor);
+        ctx.lineTo(xCoor, bottom);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+      }
+    }
+  }
 
   return (
     <>
@@ -231,17 +263,22 @@ function App() {
 
       <Line 
         options = {{
+          interaction: {
+            mode: 'index',
+            axis: 'x'
+          },
           plugins: {
             tooltip: {
+              mode: 'index',
               callbacks: {
-                beforeTitle: function(context) {
+                beforeTitle: function() {
                   return "Month"
                 }
               }
             },
             lineAtBreakEven: {
               intersection: breakEvenMonth() 
-            }
+            },
           },
           responsive: true,
           scales: {
@@ -266,7 +303,7 @@ function App() {
             y: {
               title: {
                 display: true,
-                text: 'Cost',
+                text: 'Monthly Cost',
               },
             }
           },
@@ -278,7 +315,8 @@ function App() {
               hitRadius: 4,
             }
           }
-        }} plugins = {[lineAtBreakEven]}
+        }} 
+        plugins = {[lineAtBreakEven, verticalHoverLine]}
         data ={{
           labels: Array(inputValues.stayDuration*12).fill().map((_, i) => (i+1)),
           datasets: [
@@ -301,11 +339,11 @@ function App() {
 
       <h2>Total costs</h2>
     
-      <h3>Owning costs</h3>
-      <p>${calcOwnerCost()}</p>
+      <h3>Owning</h3>
+      <p>${formatNumberInString(calcOwnerCost())}</p>
 
-      <h3>Renting cost:</h3>
-      <p>${calcRenterCost()}</p>
+      <h3>Renting</h3>
+      <p>${formatNumberInString(calcRenterCost())}</p>
            
     </>
   );
