@@ -2,7 +2,7 @@ import './App.css'
 import CalcForm from './CalcForm.jsx'
 import { useState } from 'react'
 import { Line } from 'react-chartjs-2'
-import { formatNumberInString, extractNumberInString } from './number-formatter';
+import { formatNumberInString } from './number-formatter';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -221,7 +221,7 @@ function App() {
 
   const verticalHoverLine = {
     id: 'verticalHoverLine',
-    afterDatasetsDraw(chart, args, plugins) {
+    beforeDatasetsDraw(chart, args, plugins) {
       const { ctx, tooltip, chartArea: {top, bottom, left, right, width, height},
         scales: {x, y} } = chart;
 
@@ -273,7 +273,17 @@ function App() {
               callbacks: {
                 beforeTitle: function() {
                   return "Month"
-                }
+                },
+                label: function(context) {
+                  let label = context.dataset.label || "";
+                  if (label) {
+                    label += ": " 
+                  }
+                  if (context.parsed.y !== null) {
+                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                  }
+                  return label;
+                } 
               }
             },
             lineAtBreakEven: {
@@ -337,13 +347,13 @@ function App() {
         }} 
       />   
 
-      <h2>Total costs</h2>
+      <h2>Total Costs</h2>
     
       <h3>Owning</h3>
-      <p>${formatNumberInString(calcOwnerCost())}</p>
+      <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcOwnerCost())}</p>
 
       <h3>Renting</h3>
-      <p>${formatNumberInString(calcRenterCost())}</p>
+      <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcRenterCost())}</p>
            
     </>
   );
