@@ -2,7 +2,7 @@ import './App.css'
 import CalcForm from './CalcForm.jsx'
 import { useState } from 'react'
 import { Line } from 'react-chartjs-2'
-import { formatNumberInString } from './number-formatter';
+//import { formatNumberInString } from './number-formatter';
 import {
   Chart as ChartJS,
   CategoryScale,

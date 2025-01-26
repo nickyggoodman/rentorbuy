@@ -1,3 +1,4 @@
+import './CalcForm.css';
 import { useState } from 'react';
 import { formatNumberInString, extractNumberInString } from './number-formatter';
 
@@ -74,7 +75,7 @@ function CalcForm({updateInputValue, inputValues}) {
   }
 
   return (
-    <>
+    <div className="calcForm">
       <h2>Location</h2>
 
       <div className="inputField">
@@ -335,7 +336,7 @@ function CalcForm({updateInputValue, inputValues}) {
           onChange={handleInputChange} />
 
       </div>
-    </>
+    </div>
   );
 
 }
