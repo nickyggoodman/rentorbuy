@@ -1,9 +1,19 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
+  margin: auto;
   padding: 2rem;
-  text-align: center;
+/*  text-align: center;*/
   font-size: 18px;
+}
+
+#totals {
+ display: flex;
+ flex-direction: row;
+ text-align: justify;
+}
+
+#totals p {
+  margin: 1rem;
 }
 
 h2 {

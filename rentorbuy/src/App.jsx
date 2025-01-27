@@ -349,12 +349,13 @@ function App() {
 
       <h2>Total Costs</h2>
     
-      <h3>Owning</h3>
-      <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcOwnerCost())}</p>
+      <div id='totals'>
+        <h3>Owning:</h3>
+        <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcOwnerCost())}</p>
 
-      <h3>Renting</h3>
-      <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcRenterCost())}</p>
-           
+        <h3>Renting:</h3>
+        <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcRenterCost())}</p>
+      </div>   
     </>
   );
 }

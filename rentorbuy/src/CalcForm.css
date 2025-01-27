@@ -1,7 +1,13 @@
 .calcForm {
-  width: 20rem;
+  margin: auto;
+}
+
+.calcFormSection {
+  margin: 0 auto 0 0;
+  width: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .inputField > label {
@@ -15,9 +21,9 @@
 }
 
 .inputField {
-  margin: auto;
+  margin: 0 auto 0 0;
   padding: .2em;
-  width: 50%;
+  width: 20rem;
   display: flex;
   flex-direction: column;
   text-align: left;
