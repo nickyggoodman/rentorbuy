@@ -189,14 +189,14 @@ function App() {
 
     let i = 0;
     let intersect = false;
-    while (!intersect && i < 500 ) {
+    while (!intersect && i < inputValues.stayDuration * 12 ) {
       if ((ownerData[i] < renterData[i] && ownerData[i + 1] > renterData[i + 1]) ||
       (ownerData[i] > renterData[i] && ownerData[i + 1] < renterData[i + 1])) {
         intersect = true;
       }
       i++;
     }
-    return i;
+    return intersect ? i : 0;
   }
 
 
@@ -205,16 +205,18 @@ function App() {
     
     afterDatasetDraw(chart, args, options) {
       const { ctx, chartArea: {top, bottom}, scales: {x} } = chart;
-      ctx.save();
-      ctx.beginPath();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-      ctx.setLineDash([10, 5]);
-      ctx.moveTo(x.getPixelForValue(options.intersection), top);
-      ctx.lineTo(x.getPixelForValue(options.intersection), bottom);
-      ctx.stroke();
-      ctx.closePath();
-      ctx.restore();
+      if (options.intersection > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.setLineDash([10, 5]);
+        ctx.moveTo(x.getPixelForValue(options.intersection), top);
+        ctx.lineTo(x.getPixelForValue(options.intersection), bottom);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+      }
     }
   
   } 
@@ -355,6 +357,9 @@ function App() {
 
         <h3>Renting:</h3>
         <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcRenterCost())}</p>
+
+        <h3>Monthly Cost Break-Even Point:</h3>
+        <p>{breakEvenMonth()} months ({(breakEvenMonth()/12).toFixed(1)} years)</p>
       </div>   
     </>
   );
