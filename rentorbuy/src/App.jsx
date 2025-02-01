@@ -91,7 +91,8 @@ function App() {
     // add recurring costs
     costArr[0] = mortgagePayment + homeInsurance + maintenanceCost + hoaFee + propertyTax; 
     for (let i = 1; i < inputValues.stayDuration * 12; i++) {
-      costArr.push(mortgagePayment + homeInsurance + maintenanceCost + hoaFee + propertyTax);
+      costArr.push(homeInsurance + maintenanceCost + hoaFee + propertyTax);
+      costArr[i] += (i < inputValues.loanTerm*12 ? mortgagePayment : 0);
       homeInsurance = homeInsurance * (1 + r/12);
       maintenanceCost = maintenanceCost * (1 + r/12);
       hoaFee = hoaFee * (1 + r/12)
@@ -197,6 +198,13 @@ function App() {
       i++;
     }
     return intersect ? i : 0;
+  }
+
+
+  function calcBuyerOppCost() {
+  }
+
+  function calcRenterOppCost() {
   }
 
 
@@ -352,14 +360,53 @@ function App() {
       <h2>Total Costs</h2>
     
       <div id='totals'>
-        <h3>Owning:</h3>
-        <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcOwnerCost())}</p>
+        <div>
+          <h3>Owning:</h3>
+          <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcOwnerCost())}</p>
+        </div>
 
-        <h3>Renting:</h3>
-        <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcRenterCost())}</p>
+        <div>
+          <h3>Renting:</h3>
+          <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcRenterCost())}</p>
+        </div>
 
-        <h3>Monthly Cost Break-Even Point:</h3>
-        <p>{breakEvenMonth()} months ({(breakEvenMonth()/12).toFixed(1)} years)</p>
+        <div>
+          <h3>Monthly Cost Break-Even Point:</h3>
+          <p>{breakEvenMonth()} months ({(breakEvenMonth()/12).toFixed(1)} years)</p>
+        </div>
+
+        <div id='opportunityCosts'>
+          <h3>Opportunity Costs</h3> 
+          <div>
+            <h4>Renting:</h4> 
+            <p>
+              The renter's difference is the area below the renter's monthly cost
+              curve to above the buyers monthly cost curve. The opportunity cost
+              is the total of the accumulation of the renter's difference compounded
+              from the month it was invested to the end of the stay duration. In 
+              simpler terms, it is the amount one could have earned if had instead
+              bought a home and invested the saved cost while owning is cheaper. 
+              This would typically
+              happen after some years where rent has exceeded mortgage cost, or
+              when the mortgage is paid off.
+            </p> 
+          </div>
+          <div>
+            <h4>Owning:</h4>
+            <p>
+              The owner's difference is the area below the buyers's monthly cost
+              curve to above the renters's monthly cost curve. The opportunity cost
+              includes the accumulation of the buyer's difference compounded
+              from the month it was invested to the end of the stay duration. In
+              simpler terms, it is the amount one could have earned if they had
+              rented a home and invested the saved cost while renting is cheaper.
+              This would typically occur before renting costs inflate beyond
+              owning costs. Additionally, the owner's opportunity costs includes
+              what the owner could have earned had they invested the down payment
+              on their home into something else. 
+            </p>
+          </div>
+        </div>
       </div>   
     </>
   );

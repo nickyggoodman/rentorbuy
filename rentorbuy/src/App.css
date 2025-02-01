@@ -8,14 +8,17 @@
 
 #totals {
  display: flex;
- flex-direction: row;
+ flex-direction: column;
 }
 
-#totals p {
-  margin: 1rem 1rem 1rem 1rem;
+#totals div {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+}
+
+#totals #opportunityCosts {
+  display: flex;
+  flex-direction: column;
 }
 
 h2 {
