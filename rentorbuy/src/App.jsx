@@ -184,24 +184,29 @@ function App() {
     return totalCost.toFixed(2);
   }
 
-  function breakEvenMonth() {
+  function breakEvenMonths() {
     let ownerData = genOwnerCostArr();
     let renterData = genRenterCostArr();
 
     let i = 0;
-    let intersect = false;
-    while (!intersect && i < inputValues.stayDuration * 12 ) {
+    let intersections = [];
+    while (i < inputValues.stayDuration * 12 ) {
       if ((ownerData[i] < renterData[i] && ownerData[i + 1] > renterData[i + 1]) ||
       (ownerData[i] > renterData[i] && ownerData[i + 1] < renterData[i + 1])) {
-        intersect = true;
+        intersections.push(i+1);
       }
       i++;
     }
-    return intersect ? i : 0;
+    console.log("intersections:" + intersections);
+    return intersections;
   }
 
-
+  /*
+   * the cost curves aren't technically continuous, so to get the total difference,
+   * we have to sum the difference for every month.
+   */
   function calcBuyerOppCost() {
+    
   }
 
   function calcRenterOppCost() {
@@ -213,17 +218,19 @@ function App() {
     
     afterDatasetDraw(chart, args, options) {
       const { ctx, chartArea: {top, bottom}, scales: {x} } = chart;
-      if (options.intersection > 0) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-        ctx.setLineDash([10, 5]);
-        ctx.moveTo(x.getPixelForValue(options.intersection), top);
-        ctx.lineTo(x.getPixelForValue(options.intersection), bottom);
-        ctx.stroke();
-        ctx.closePath();
-        ctx.restore();
+      if (options.intersections.length > 0) {
+        for (let i=0, n=options.intersections.length; i < n; i++){    
+          ctx.save();
+          ctx.beginPath();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+          ctx.setLineDash([10, 5]);
+          ctx.moveTo(x.getPixelForValue(options.intersections[i]), top);
+          ctx.lineTo(x.getPixelForValue(options.intersections[i]), bottom);
+          ctx.stroke();
+          ctx.closePath();
+          ctx.restore();
+        }
       }
     }
   
@@ -297,7 +304,7 @@ function App() {
               }
             },
             lineAtBreakEven: {
-              intersection: breakEvenMonth() 
+              intersections: breakEvenMonths() 
             },
           },
           responsive: true,
@@ -370,11 +377,6 @@ function App() {
           <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcRenterCost())}</p>
         </div>
 
-        <div>
-          <h3>Monthly Cost Break-Even Point:</h3>
-          <p>{breakEvenMonth()} months ({(breakEvenMonth()/12).toFixed(1)} years)</p>
-        </div>
-
         <div id='opportunityCosts'>
           <h3>Opportunity Costs</h3> 
           <div>
@@ -403,7 +405,7 @@ function App() {
               This would typically occur before renting costs inflate beyond
               owning costs. Additionally, the owner's opportunity costs includes
               what the owner could have earned had they invested the down payment
-              on their home into something else. 
+              on their home into something else.
             </p>
           </div>
         </div>
