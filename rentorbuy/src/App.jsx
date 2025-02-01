@@ -12,6 +12,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler
 } from 'chart.js';
 
 ChartJS.register(
@@ -21,7 +22,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 function App() {
@@ -303,6 +305,8 @@ function App() {
                 } 
               }
             },
+            filler: {
+            },
             lineAtBreakEven: {
               intersections: breakEvenMonths() 
             },
@@ -352,13 +356,22 @@ function App() {
               data: genOwnerCostArr(),
               borderColor: 'red',
               backgroundColor: 'red',
+              fill: {
+                target: '+1',
+                below: 'rgba(0, 0, 255, 0.1)',
+                above: 'rgba(0, 0, 0, 0.0)',
+              }
             },
             {
               label: 'Monthly Renter Costs',
               data: genRenterCostArr(),
-              borderColor: 'green',
-              backgroundColor: 'green',
-
+              borderColor: 'blue',
+              backgroundColor: 'blue',
+              fill: {
+                target: '-1',
+                below: 'rgba(255, 0, 0, 0.1)',
+                above: 'rgba(0, 0, 0, 0.0)',
+              }
             }
           ]
         }} 
