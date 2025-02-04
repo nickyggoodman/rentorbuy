@@ -12,7 +12,9 @@ function CalcForm({updateInputValue, inputValues}) {
       mortgageRate: formatNumberInString((inputValues.mortgageRate * 100).toString()) + "%",
       loanTerm: "" + formatNumberInString(inputValues.loanTerm.toString()),
       inflationRate: formatNumberInString((inputValues.inflationRate * 100).toString()) + "%",
-      homeValGrowth:  formatNumberInString((inputValues.homeValGrowth * 100).toString()) + "%",      homeInsurance: "$" + inputValues.homeInsurance,
+      homeValGrowth:  formatNumberInString((inputValues.homeValGrowth * 100).toString()) + "%",      
+      investmentRate: formatNumberInString((inputValues.investmentRate * 100).toString()) + "%",      
+      homeInsurance: "$" + formatNumberInString(inputValues.homeInsurance.toString()),
       closingCosts: "$" + formatNumberInString(inputValues.closingCosts.toString()),
       hoaCondoFees: "$" + formatNumberInString(inputValues.hoaCondoFees.toString()),
       monthlyMaintenance: "$" + formatNumberInString(inputValues.monthlyMaintenance.toString()),
@@ -231,6 +233,18 @@ function CalcForm({updateInputValue, inputValues}) {
             id="homeValGrowth" className="percentageInput"
             onChange={handleInputChange} />
         </div>
+    
+        
+        <div className="inputField">
+          <label htmlFor="investmentRate">Investment rate</label>
+          <input 
+            value={displayValues.investmentRate} 
+            type="text"  
+            name="investmentRate" 
+            id="investmentRate" className="percentageInput"
+            onChange={handleInputChange} />
+        </div>
+
       </div>
       
     {

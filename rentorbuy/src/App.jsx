@@ -37,6 +37,7 @@ function App() {
       loanTerm: 30,
       inflationRate: 0.02,
       homeValGrowth: 0.04,
+      investmentRate: 0.06,
       homeInsurance: 0,
       closingCosts: 0,
       hoaCondoFees: 0,
@@ -204,14 +205,27 @@ function App() {
   }
 
   /*
-   * the cost curves aren't technically continuous, so to get the total difference,
-   * we have to sum the difference for every month.
+   * Calculate the sum of the compounded investments from every month's difference
+   * between the owner monthly cost and the renter monthly cost
    */
-  function calcBuyerOppCost() {
-    
+  function calcOwnerOppCost() {
+    const ownerCosts = genOwnerCostArr();
+    const renterCosts = renterCostArr();
+    for (let i=0; i < inputValues.stayDuration * 12; i++) {
+      if (ownerCost[i] > renterCost[i]) {
+        //
+        let diff = ownerCost[i] - renterCost[i];
+
+      }  
+    }  
   }
 
+  /*
+   * Calculate the sum of the compounded investments from every month's difference
+   * between the renter monthly cost and the owner monthly cost. 
+   */
   function calcRenterOppCost() {
+  
   }
 
 
@@ -358,7 +372,7 @@ function App() {
               backgroundColor: 'red',
               fill: {
                 target: '+1',
-                below: 'rgba(0, 0, 255, 0.1)',
+                below: 'rgba(0, 0, 255, 0.05)',
                 above: 'rgba(0, 0, 0, 0.0)',
               }
             },
@@ -369,7 +383,7 @@ function App() {
               backgroundColor: 'blue',
               fill: {
                 target: '-1',
-                below: 'rgba(255, 0, 0, 0.1)',
+                below: 'rgba(255, 0, 0, 0.05)',
                 above: 'rgba(0, 0, 0, 0.0)',
               }
             }
@@ -395,15 +409,13 @@ function App() {
           <div>
             <h4>Renting:</h4> 
             <p>
-              The renter's difference is the area below the renter's monthly cost
+              The renter's differences are comprised in the area below the renter's monthly cost
               curve to above the buyers monthly cost curve. The opportunity cost
-              is the total of the accumulation of the renter's difference compounded
-              from the month it was invested to the end of the stay duration. In 
-              simpler terms, it is the amount one could have earned if had instead
-              bought a home and invested the saved cost while owning is cheaper. 
-              This would typically
-              happen after some years where rent has exceeded mortgage cost, or
-              when the mortgage is paid off.
+              is the total of the accumulation of the renter's cost differences compounded
+              from the month they were invested to the end of the stay duration. The individual is
+              assumed to be able to afford the max between the monthly renter cost and
+              the monthly owner cost. Therefore, any difference between the two costs could have
+              been used to invest in other uses, such as the stock market.
             </p> 
           </div>
           <div>
