@@ -2,7 +2,6 @@ import './App.css'
 import CalcForm from './CalcForm.jsx'
 import { useState } from 'react'
 import { Line } from 'react-chartjs-2'
-//import { formatNumberInString } from './number-formatter';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -164,6 +163,14 @@ function App() {
       hoaFee = hoaFee * (1 + r/12)
     }
 
+    console.log(ownerRenterCostDifferences());
+
+    ownerRenterCostDifferences().forEach(number => {
+     if (number < 0) {
+       totalCost += -number;
+     }
+    });
+
     return totalCost.toFixed(2);
   } 
 
@@ -184,6 +191,14 @@ function App() {
       growingCosts = growingCosts * (1 + r/12);
     }
 
+    console.log(ownerRenterCostDifferences());
+    
+    ownerRenterCostDifferences().forEach(number => {
+     if (number > 0) {
+       totalCost += number;
+     }
+    });
+
     return totalCost.toFixed(2);
   }
 
@@ -200,7 +215,6 @@ function App() {
       }
       i++;
     }
-    console.log("intersections:" + intersections);
     return intersections;
   }
 
@@ -210,14 +224,18 @@ function App() {
    */
   function calcOwnerOppCost() {
     const ownerCosts = genOwnerCostArr();
-    const renterCosts = renterCostArr();
+    const renterCosts = genRenterCostArr();
+    const r = inputValues.investmentRate;
+    
+    let sum = 0;
     for (let i=0; i < inputValues.stayDuration * 12; i++) {
-      if (ownerCost[i] > renterCost[i]) {
-        //
-        let diff = ownerCost[i] - renterCost[i];
-
-      }  
+      if (ownerCosts[i] > renterCosts[i]) {
+        sum += ownerCosts[i] - renterCosts[i];
+      }
+      sum *= 1 + r/12;
     }  
+
+    return sum;
   }
 
   /*
@@ -225,7 +243,50 @@ function App() {
    * between the renter monthly cost and the owner monthly cost. 
    */
   function calcRenterOppCost() {
-  
+    const ownerCosts = genOwnerCostArr();
+    const renterCosts = genRenterCostArr();
+    const r = inputValues.investmentRate;
+
+    let sum = 0;
+    for (let i=0; i < inputValues.stayDuration * 12; i++) {
+      if (renterCosts[i] > ownerCosts[i]){
+        sum += renterCosts[i] - ownerCosts[i];
+      }
+      sum *= 1 + r/12;
+    }
+    return sum;
+  }
+
+  function calcFinalHomeValue(){
+    const p = inputValues.homePrice;
+    const r = inputValues.homeValGrowth;
+    const n = 12;
+    const t = inputValues.stayDuration;
+    
+    return p * (1 + r/n)**(t*n);
+  }
+
+  /*
+   * returns an array of relative differences of the owner cost from the
+   * renter cost line. e.g., if the renter cost for the month is 1000 and the 
+   * owner cost is 1100, then 100 would be pushed to the array. Similarly, 
+   * if the owner cost is 1100 for the month and the renter cost is 1200, then
+   * -100 would be pushed to the array.
+   */
+  function ownerRenterCostDifferences() {
+    let res = [];
+    const ownerCosts = genOwnerCostArr();
+    const renterCosts = genRenterCostArr();
+    
+    for (let i = 0; i < inputValues.stayDuration * 12; i++){
+      if (renterCosts[i] > ownerCosts[i]) {
+        res.push(ownerCosts[i] - renterCosts[i]);
+      } else {
+        res.push((renterCosts[i] - ownerCosts[i]) * -1);
+      }
+    }
+
+    return res;
   }
 
 
@@ -391,21 +452,22 @@ function App() {
         }} 
       />   
 
-      <h2>Total Costs</h2>
+      <h2>Totals</h2>
     
       <div id='totals'>
+      <h3>Costs</h3> 
         <div>
-          <h3>Owning:</h3>
+          <h4>Owning:</h4>
           <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcOwnerCost())}</p>
         </div>
 
         <div>
-          <h3>Renting:</h3>
+          <h4>Renting:</h4>
           <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcRenterCost())}</p>
         </div>
 
         <div id='opportunityCosts'>
-          <h3>Opportunity Costs</h3> 
+          <h3>Returns</h3> 
           <div>
             <h4>Renting:</h4> 
             <p>
@@ -416,6 +478,8 @@ function App() {
               assumed to be able to afford the max between the monthly renter cost and
               the monthly owner cost. Therefore, any difference between the two costs could have
               been used to invest in other uses, such as the stock market.
+              
+              <h4>Return on Investments:</h4>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcOwnerOppCost())}
             </p> 
           </div>
           <div>
@@ -431,7 +495,15 @@ function App() {
               owning costs. Additionally, the owner's opportunity costs includes
               what the owner could have earned had they invested the down payment
               on their home into something else.
+              <h4>Return on Investments:</h4> {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(calcFinalHomeValue() + calcRenterOppCost())}
             </p>
+          </div>
+        </div>
+        <div>
+          <h3>Net</h3>
+          <div>
+            <h4>Owning</h4>
+            <p>Total spent: </p>
           </div>
         </div>
       </div>   
