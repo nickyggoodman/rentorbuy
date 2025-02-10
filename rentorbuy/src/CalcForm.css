@@ -3,8 +3,7 @@
 }
 
 .calcFormSection {
-  margin: 0 auto 0 0;
-  width: auto;
+  margin: auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -21,9 +20,9 @@
 }
 
 .inputField {
-  margin: 0 auto 0 0;
+  flex: 1 0 31%;
+  margin: 0 0 0 0;
   padding: .2em;
-  width: 20rem;
   display: flex;
   flex-direction: column;
   text-align: left;

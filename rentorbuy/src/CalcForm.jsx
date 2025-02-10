@@ -1,4 +1,5 @@
 import './CalcForm.css';
+import Switch from "./Switch.jsx";
 import { useState } from 'react';
 import { formatNumberInString, extractNumberInString } from './number-formatter';
 
@@ -117,7 +118,6 @@ function CalcForm({updateInputValue, inputValues}) {
             id="downPayment" className="percentageInput"
             onChange={handleInputChange} 
             onFocus={(e)=> e.target.setSelectionRange(e.target.value.length-1,e.target.value.length-1)}/>
-
         </div>  
 
         <div className="inputField">
@@ -129,7 +129,6 @@ function CalcForm({updateInputValue, inputValues}) {
             id="mortgageRate" className="percentageInput"
             onFocus={(e)=> e.target.setSelectionRange(e.target.value.length-1,e.target.value.length-1)}
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -153,7 +152,6 @@ function CalcForm({updateInputValue, inputValues}) {
             id="stayDuration" 
             className="numberInput"
             onChange={handleInputChange} />
-
         </div>
 
       
@@ -165,7 +163,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="homeInsurance" 
             id="homeInsurance" className="monetaryInput" 
             onChange={handleInputChange}/>
-
         </div>
 
         <div className="inputField">
@@ -176,7 +173,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="closingCosts" 
             id="closingCosts" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -187,7 +183,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="hoaCondoFees" 
             id="hoaCondoFees" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -198,7 +193,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="monthlyMaintenance" 
             id="monthlyMaintenance" className="monetaryInput"  
             onChange={handleInputChange} />
-
         </div>
       
         <div className="inputField">
@@ -209,7 +203,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="propertyTax" 
             id="propertyTax" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         
@@ -221,7 +214,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="inflationRate" 
             id="inflationRate" className="percentageInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -245,6 +237,11 @@ function CalcForm({updateInputValue, inputValues}) {
             onChange={handleInputChange} />
         </div>
 
+        <div className="inputField">
+          <label htmlFor="switch">Invest differential</label>
+          <Switch />
+        </div>
+
       </div>
       
     {
@@ -257,6 +254,7 @@ function CalcForm({updateInputValue, inputValues}) {
       <h2>Renting</h2>
 
       <div className='calcFormSection'>
+
         <div className="inputField">
           <label htmlFor="desiredRent">Desired rent</label>
           <input 
@@ -265,7 +263,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="desiredRent" 
             id="desiredRent" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -276,7 +273,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="renterInsurance" 
             id="renterInsurance" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -287,7 +283,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="securityDeposit" 
             id="securityDeposit" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -298,7 +293,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="petDeposit" 
             id="petDeposit" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -309,7 +303,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="utilIncluded" 
             id="utilIncluded" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -320,7 +313,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="appFee" 
             id="appFee" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -331,7 +323,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="parkingFee" 
             id="parkingFee" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -342,7 +333,6 @@ function CalcForm({updateInputValue, inputValues}) {
             name="maintenanceFee" 
             id="maintenanceFee" className="monetaryInput" 
             onChange={handleInputChange} />
-
         </div>
 
         <div className="inputField">
@@ -354,7 +344,9 @@ function CalcForm({updateInputValue, inputValues}) {
             id="amenitiesFee" className="monetaryInput" 
             onChange={handleInputChange} />
         </div>
+
       </div>
+
     </div>
   );
 
