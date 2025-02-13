@@ -52,6 +52,7 @@ function App() {
       parkingFee: 0,
       maintenanceFee: 0,
       amenitiesFee: 0,
+      differentialIncluded: true,
     }
   );
 
@@ -163,13 +164,14 @@ function App() {
       hoaFee = hoaFee * (1 + r/12)
     }
 
-    console.log(ownerRenterCostDifferences());
 
-    ownerRenterCostDifferences().forEach(number => {
-     if (number < 0) {
-       totalCost += -number;
-     }
-    });
+    if (inputValues.differentialIncluded) {
+      ownerRenterCostDifferences().forEach(number => {
+       if (number < 0) {
+         totalCost += -number;
+       }
+      });
+    }
 
     return totalCost.toFixed(2);
   } 
@@ -191,13 +193,13 @@ function App() {
       growingCosts = growingCosts * (1 + r/12);
     }
 
-    console.log(ownerRenterCostDifferences());
-    
-    ownerRenterCostDifferences().forEach(number => {
-     if (number > 0) {
-       totalCost += number;
-     }
-    });
+    if (inputValues.differentialIncluded) {
+      ownerRenterCostDifferences().forEach(number => {
+       if (number > 0) {
+         totalCost += number;
+       }
+      });
+    }
 
     return totalCost.toFixed(2);
   }

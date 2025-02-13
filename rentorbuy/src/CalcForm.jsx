@@ -30,6 +30,7 @@ function CalcForm({updateInputValue, inputValues}) {
       parkingFee: "$" + formatNumberInString(inputValues.parkingFee.toString()),
       maintenanceFee: "$" + formatNumberInString(inputValues.maintenanceFee.toString()),
       amenitiesFee: "$" + formatNumberInString(inputValues.amenitiesFee.toString()),
+      differentialIncluded: inputValues.differentialIncluded,
     }
   );
 
@@ -64,6 +65,16 @@ function CalcForm({updateInputValue, inputValues}) {
       });
 
       updateInputValue(e.target.id, extractNumberInString(str) || 0)
+
+    } else if (e.target.className == "checkboxInput") {
+      
+      setDisplayValues({
+        ...displayValues,
+        [e.target.id] : !displayValues.differentialIncluded
+      });
+      
+      updateInputValue(e.target.id, !displayValues.differentialIncluded); 
+      console.log(e.target.checked);
 
     } else {
      
@@ -238,8 +249,14 @@ function CalcForm({updateInputValue, inputValues}) {
         </div>
 
         <div className="inputField">
-          <label htmlFor="switch">Invest differential</label>
-          <Switch />
+          <label htmlFor="differentialIncluded">Invest differential</label>
+          <input
+            type="checkbox"
+            name="differentialIncluded"
+            id="differentialIncluded" className="checkboxInput"
+            onChange={handleInputChange}
+            checked = {displayValues.differentialIncluded}
+          />
         </div>
 
       </div>
