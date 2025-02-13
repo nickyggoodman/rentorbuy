@@ -52,7 +52,7 @@ function App() {
       parkingFee: 0,
       maintenanceFee: 0,
       amenitiesFee: 0,
-      differentialIncluded: true,
+      differentialIncluded: false,
     }
   );
 

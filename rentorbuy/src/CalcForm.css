@@ -22,8 +22,17 @@
 .inputField {
   flex: 1 0 31%;
   margin: 0 0 0 0;
-  padding: .2em;
+  padding: .2rem;
   display: flex;
   flex-direction: column;
-  text-align: left;
 }
+
+.checkboxInput {
+  width: 2rem;
+  padding: 0rem;
+  margin: .2rem;
+}
+
+
+
+
