@@ -91,7 +91,7 @@ function App() {
       + inputValues.homePrice*inputValues.downPayment
     );
 
-    // add recurring costs
+    // add reurring costs
     costArr[0] = mortgagePayment + homeInsurance + maintenanceCost + hoaFee + propertyTax; 
     for (let i = 1; i < inputValues.stayDuration * 12; i++) {
       costArr.push(homeInsurance + maintenanceCost + hoaFee + propertyTax);
@@ -230,12 +230,14 @@ function App() {
     const r = inputValues.investmentRate;
     
     let sum = 0;
-    for (let i=0; i < inputValues.stayDuration * 12; i++) {
-      if (ownerCosts[i] > renterCosts[i]) {
-        sum += ownerCosts[i] - renterCosts[i];
-      }
-      sum *= 1 + r/12;
-    }  
+    if (inputValues.differentialIncluded){
+      for (let i=0; i < inputValues.stayDuration * 12; i++) {
+        if (ownerCosts[i] > renterCosts[i]) {
+          sum += ownerCosts[i] - renterCosts[i];
+        }
+        sum *= 1 + r/12;
+      }  
+    }
 
     return sum;
   }
@@ -250,11 +252,13 @@ function App() {
     const r = inputValues.investmentRate;
 
     let sum = 0;
-    for (let i=0; i < inputValues.stayDuration * 12; i++) {
-      if (renterCosts[i] > ownerCosts[i]){
-        sum += renterCosts[i] - ownerCosts[i];
+    if (inputValues.differentialIncluded) {
+      for (let i=0; i < inputValues.stayDuration * 12; i++) {
+        if (renterCosts[i] > ownerCosts[i]){
+          sum += renterCosts[i] - ownerCosts[i];
+        }
+        sum *= 1 + r/12;
       }
-      sum *= 1 + r/12;
     }
     return sum;
   }
