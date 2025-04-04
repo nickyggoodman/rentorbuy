@@ -23,7 +23,7 @@ made interpretation difficult. With this tool, one can clearly see what a change
 in one variable would explicitly change with the total cost and break-even points.
 
 ## Usage
-Navigate to the parent directory of ```/src```, ```/public```, and ```node_modules```.
+Navigate to the parent directory of ```/src```, ```/public```, and ```/node_modules```.
 ```bash
 cd rentorbuy
 ```
