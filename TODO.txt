@@ -1,0 +1,4 @@
+add homeowner incentives as variables:
+    - Government-backed home loans and mortgage assistance (U.S.)
+    - Homeownership vouchers for first-time home buyers (U.S.)
+    - Real estate and federal lands for sale by the government (U.S.)
