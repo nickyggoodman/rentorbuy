@@ -31,6 +31,8 @@ Run the development build locally.
 ```bash
 npm run dev
 ```
+This will run the project locally. Simply go to http://localhost:5173/ in your
+favorite browser to use the tool.
 
 ## Installation
 Clone the repository wherever you would like.
