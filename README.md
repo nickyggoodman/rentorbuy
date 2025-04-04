@@ -26,6 +26,7 @@ in one variable would explicitly change with the total cost and break-even point
 Navigate to the parent directory of ```/src```, ```/public```, and ```node_modules```.
 ```bash
 cd rentorbuy
+```
 Run the development build locally.
 ```bash
 npm run dev
